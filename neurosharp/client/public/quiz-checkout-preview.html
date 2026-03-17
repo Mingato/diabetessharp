@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — NeuroSharp | Your Cognitive Profile</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(to bottom right, #eff6ff, #e0e7ff);
+      padding: 2rem 1rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #111827;
+    }
+    .wrap { max-width: 42rem; margin: 0 auto; }
+    .card {
+      background: #fff;
+      border-radius: 1rem;
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+      border: 1px solid #e5e7eb;
+    }
+    .card-checkout {
+      border: 2px solid #93c5fd;
+      background: linear-gradient(to bottom, #eff6ff, #fff);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .text-center { text-align: center; }
+    .mb-1 { margin-bottom: 0.25rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-5 { margin-bottom: 1.25rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mt-3 { margin-top: 0.75rem; }
+    .mt-6 { margin-top: 1.5rem; }
+    h1 { font-size: 1.875rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #111827; }
+    h2 { font-size: 1.25rem; font-weight: 700; margin: 0 0 0.75rem 0; color: #111827; }
+    h3 { font-size: 1rem; font-weight: 700; margin: 0 0 0.25rem 0; color: #111827; }
+    p { margin: 0; color: #4b5563; font-size: 0.875rem; line-height: 1.5; }
+    .subtitle { color: #6b7280; font-size: 0.875rem; }
+    .score { font-size: 3rem; font-weight: 700; color: #2563eb; margin: 0 0 0.5rem 0; }
+    .bar-wrap { height: 12px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; margin-bottom: 1rem; }
+    .bar { height: 100%; background: #ef4444; border-radius: 9999px; width: 38%; }
+    .risk-box { background: #fef2f2; border-left: 4px solid #ef4444; padding: 1rem; border-radius: 0.5rem; }
+    .risk-box h3 { color: #b91c1c; }
+    .risk-box p { color: #b91c1c; font-size: 0.875rem; }
+    .secure-label { font-size: 0.75rem; font-weight: 600; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    .list { list-style: none; padding: 0; margin: 0 0 1.25rem 0; }
+    .list li { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.375rem; color: #374151; font-size: 0.875rem; }
+    .list li span { color: #059669; font-weight: 700; }
+    .btn {
+      display: inline-block;
+      width: 100%;
+      max-width: 28rem;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(to right, #2563eb, #4f46e5);
+      color: #fff !important;
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      border: none;
+      cursor: pointer;
+      min-height: 52px;
+      line-height: 1.3;
+    }
+    .btn:hover { opacity: 0.95; }
+    .btn-wrap { text-align: center; }
+    .note { font-size: 0.75rem; color: #6b7280; margin-top: 0.75rem; }
+    .item { display: flex; gap: 1rem; margin-bottom: 1rem; }
+    .item span:first-child { font-size: 1.5rem; }
+    .item div { flex: 1; }
+    .item p { font-size: 0.875rem; color: #4b5563; margin-top: 0.25rem; }
+    .footer-note { text-align: center; font-size: 0.875rem; color: #6b7280; margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="text-center mb-6">
+      <div class="card" style="display: inline-block; padding: 1rem; margin-bottom: 1rem;">
+        <span style="font-size: 3rem;">🧠</span>
+      </div>
+      <h1>Your Cognitive Profile</h1>
+      <p class="subtitle">Personalized analysis by Dr. Marcus · Checkout</p>
+      <p class="note">Updated</p>
+    </div>
+
+    <div class="card">
+      <div class="text-center mb-6">
+        <div class="score">38</div>
+        <p class="subtitle">Your Cognitive Score (0-100)</p>
+      </div>
+      <div class="bar-wrap">
+        <div class="bar"></div>
+      </div>
+      <div class="risk-box">
+        <h3>High Risk</h3>
+        <p>You're an ideal candidate for NeuroSharp.</p>
+      </div>
+    </div>
+
+    <div class="card card-checkout">
+      <p class="text-center secure-label">Secure checkout</p>
+      <div class="text-center mb-3" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+        <span style="font-size: 1.5rem;">🛡️</span>
+        <h2 style="margin: 0;">7-Day 100% Money-Back Guarantee</h2>
+      </div>
+      <p class="text-center mb-4" style="max-width: 36rem; margin-left: auto; margin-right: auto;">
+        Try NeuroSharp risk-free. If you're not satisfied in the first 7 days, we'll refund every penny — no questions asked.
+      </p>
+      <ul class="list">
+        <li><span>✓</span> Full refund within 7 days</li>
+        <li><span>✓</span> Secure payment via Cartpanda</li>
+        <li><span>✓</span> Instant access after payment</li>
+      </ul>
+      <div class="btn-wrap">
+        <a href="https://its-brazilian-llc.mycartpanda.com/checkout/208723849:1" target="_blank" rel="noopener noreferrer" class="btn">
+          🧠 Go to Secure Checkout (Cartpanda)
+        </a>
+        <p class="note">You will be redirected to our secure payment page</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Your Personalized Recommendation</h2>
+      <div class="item">
+        <span>✓</span>
+        <div>
+          <h3>90-Day Protocol</h3>
+          <p>Based on your age, symptoms, and goals, you're an ideal candidate for the full NeuroSharp protocol.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span>✓</span>
+        <div>
+          <h3>Dr. Marcus AI Coach</h3>
+          <p>You'll benefit from 24/7 coaching with form correction and personalized tips.</p>
+        </div>
+      </div>
+      <div class="item">
+        <span>✓</span>
+        <div>
+          <h3>Adaptive Tracking</h3>
+          <p>The program will adjust difficulty in real time for maximum effectiveness.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="footer-note">Preview estática. No app, esta tela aparece após completar o quiz em <strong>/quiz</strong>.</p>
+  </div>
+</body>
+</html>

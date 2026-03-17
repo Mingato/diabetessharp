@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Memory Assessment — NeuroSharp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #0a0e14;
+      --color-surface: #12171f;
+      --color-card: #1a2029;
+      --color-border: #2a3342;
+      --color-text: #e6edf3;
+      --color-text-muted: #8b949e;
+      --color-accent: #3b82f6;
+      --radius: 12px;
+      --font-sans: "DM Sans", system-ui, sans-serif;
+      --font-serif: "Libre Baskerville", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font-sans); background: var(--color-bg); color: var(--color-text); line-height: 1.6; min-height: 100vh; }
+    .quiz-page { min-height: 100vh; padding: 2rem 1.25rem 4rem; }
+    .container { max-width: 560px; margin: 0 auto; }
+    h1 { font-family: var(--font-serif); font-size: 1.75rem; margin: 0 0 0.5rem; }
+    .quiz-progress { height: 4px; background: var(--color-border); border-radius: 2px; margin-bottom: 2rem; overflow: hidden; }
+    .quiz-progress-inner { height: 100%; background: var(--color-accent); border-radius: 2px; transition: width 0.3s; }
+    .quiz-label { display: block; font-weight: 600; margin-bottom: 0.75rem; }
+    .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+    .quiz-option { padding: 0.875rem 1rem; text-align: left; border-radius: var(--radius); border: 1px solid var(--color-border); background: var(--color-card); color: var(--color-text); font-family: inherit; font-size: 1rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { border-color: var(--color-accent); }
+    .quiz-option.active { border-color: var(--color-accent); background: rgba(59, 130, 246, 0.15); }
+    .quiz-options-row { flex-direction: row; flex-wrap: wrap; }
+    .quiz-textarea { width: 100%; padding: 0.875rem; border-radius: var(--radius); border: 1px solid var(--color-border); background: var(--color-card); color: var(--color-text); font-family: inherit; resize: vertical; min-height: 80px; }
+    .quiz-buttons { display: flex; gap: 1rem; margin-top: 2rem; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.875rem 1.75rem; font-weight: 600; font-size: 1rem; border-radius: var(--radius); border: none; cursor: pointer; font-family: inherit; text-decoration: none; }
+    .btn-primary { background: var(--color-accent); color: #fff; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-secondary { background: var(--color-card); color: var(--color-text); border: 1px solid var(--color-border); }
+    .btn-secondary:hover { border-color: var(--color-accent); }
+    .quiz-step { display: none; }
+    .quiz-step.visible { display: block; }
+    .calculating { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+    .spinner { width: 48px; height: 48px; border: 4px solid var(--color-border); border-top-color: var(--color-accent); border-radius: 50%; margin: 0 auto 1.5rem; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .result-card { background: var(--color-card); padding: 2rem; border-radius: var(--radius); border: 1px solid var(--color-border); margin-bottom: 1.5rem; }
+    .result-score { font-size: 2.5rem; font-weight: 800; }
+    .result-level { font-size: 1.5rem; font-weight: 700; }
+    .back-link { color: var(--color-text-muted); margin-top: 2rem; display: inline-block; }
+    .back-link:hover { color: var(--color-text); }
+  </style>
+</head>
+<body>
+  <div class="quiz-page" id="quizPage">
+    <div class="container">
+      <h1>Free Memory Assessment</h1>
+      <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Answer in under 2 minutes. You'll get your cognitive risk score and memory level, plus a personalized recommendation.</p>
+
+      <div class="quiz-progress">
+        <div class="quiz-progress-inner" id="progressBar" style="width: 16.67%;"></div>
+      </div>
+
+      <div class="quiz-step visible" id="step1" data-step="1">
+        <label class="quiz-label">Age range</label>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-value="45">45-55 years</button>
+          <button type="button" class="quiz-option" data-value="55">55-65 years</button>
+          <button type="button" class="quiz-option" data-value="65">65-75 years</button>
+          <button type="button" class="quiz-option" data-value="75">75+ years</button>
+        </div>
+      </div>
+
+      <div class="quiz-step" id="step2" data-step="2">
+        <label class="quiz-label">Primary concern</label>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-value="memory_loss">Memory loss</button>
+          <button type="button" class="quiz-option" data-value="brain_fog">Brain fog / mental fog</button>
+          <button type="button" class="quiz-option" data-value="alzheimers_prevention">Alzheimer's prevention</button>
+          <button type="button" class="quiz-option" data-value="post_stroke_recovery">Post-stroke recovery</button>
+          <button type="button" class="quiz-option" data-value="other">Other</button>
+        </div>
+      </div>
+
+      <div class="quiz-step" id="step3" data-step="3">
+        <label class="quiz-label">Symptom severity</label>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-value="occasional">Occasional forgetfulness</button>
+          <button type="button" class="quiz-option" data-value="frequent">Frequent lapses</button>
+          <button type="button" class="quiz-option" data-value="noticeable">Noticeable decline</button>
+          <button type="button" class="quiz-option" data-value="diagnosed">Diagnosed condition</button>
+        </div>
+      </div>
+
+      <div class="quiz-step" id="step4" data-step="4">
+        <label class="quiz-label">Family history of Alzheimer's or dementia?</label>
+        <div class="quiz-options quiz-options-row">
+          <button type="button" class="quiz-option" data-value="yes">Yes</button>
+          <button type="button" class="quiz-option" data-value="no">No</button>
+        </div>
+      </div>
+
+      <div class="quiz-step" id="step5" data-step="5">
+        <label class="quiz-label">Current habits (exercise, sleep, stress, diet)</label>
+        <textarea class="quiz-textarea" id="habits" placeholder="e.g. Walk 3x/week, irregular sleep, work stress…" rows="3"></textarea>
+      </div>
+
+      <div class="quiz-step" id="step6" data-step="6">
+        <label class="quiz-label">Motivation level</label>
+        <div class="quiz-options">
+          <button type="button" class="quiz-option" data-value="highly_motivated">Highly motivated</button>
+          <button type="button" class="quiz-option" data-value="moderately_motivated">Moderately motivated</button>
+          <button type="button" class="quiz-option" data-value="just_exploring">Just exploring</button>
+        </div>
+      </div>
+
+      <div class="quiz-buttons">
+        <button type="button" class="btn btn-secondary" id="btnBack" style="display: none;">Back</button>
+        <button type="button" class="btn btn-primary" id="btnNext">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-page calculating" id="calculatingPage" style="display: none;">
+    <div class="spinner"></div>
+    <h2 style="font-family: var(--font-serif); margin-bottom: 0.5rem;">Calculating your results…</h2>
+    <p style="color: var(--color-text-muted);">Analyzing your cognitive profile. This takes a few seconds.</p>
+  </div>
+
+  <div class="quiz-page" id="resultPage" style="display: none;">
+    <div class="container" style="padding-top: 2rem;">
+      <h1>Your Memory Assessment Result</h1>
+      <p style="color: var(--color-text-muted); margin-bottom: 2rem;">Based on your answers, here is your current cognitive risk profile.</p>
+
+      <div class="result-card">
+        <div style="margin-bottom: 1rem;">
+          <span style="font-size: 0.85rem; color: var(--color-text-muted);">Your cognitive risk score</span>
+          <div class="result-score" id="resultScore" style="color: #ea580c;">52</div>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <span style="font-size: 0.85rem; color: var(--color-text-muted);">Memory level</span>
+          <div class="result-level" id="resultLevel" style="color: #ea580c;">High</div>
+        </div>
+        <p style="margin: 0; line-height: 1.6;" id="resultDescription">Your cognitive profile indicates notable risk. The NeuroSharp 90-day program is designed for your situation and can help restore and protect memory.</p>
+        <p style="margin-top: 1rem; color: var(--color-text-muted); font-size: 0.95rem;" id="resultMessage">We recommend starting the protocol within the next 7 days for the best outcomes.</p>
+      </div>
+
+      <p style="margin-bottom: 1rem; font-weight: 600;">The NeuroSharp 90-day program is designed for your profile. Start your recovery today — 20% off for assessment takers.</p>
+
+      <a href="preview.html" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; text-align: center; box-sizing: border-box;">Start My Recovery Now — $29.99/mo</a>
+
+      <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--color-text-muted);">No commitment. 7-day money-back guarantee. Used by 45,000+ people.</p>
+
+      <a href="preview.html" class="back-link">← Back to article</a>
+    </div>
+  </div>
+
+  <script>
+    var step = 1;
+    var data = { age: 55, concern: 'memory_loss', severity: 'occasional', family: false, habits: '', motivation: 'moderately_motivated' };
+
+    var levels = [
+      { min: 70, label: 'Critical', color: '#dc2626', desc: "Your results suggest significant cognitive risk. Starting the 90-day protocol as soon as possible is strongly recommended.", msg: "Immediate action is recommended. The protocol has helped others in similar situations." },
+      { min: 50, label: 'High', color: '#ea580c', desc: "Your cognitive profile indicates notable risk. The NeuroSharp 90-day program is designed for your situation and can help restore and protect memory.", msg: "We recommend starting the protocol within the next 7 days for the best outcomes." },
+      { min: 30, label: 'Moderate', color: '#ca8a04', desc: "You're in the range where early action has the biggest impact. The protocol can strengthen your memory and slow or reverse decline.", msg: "The 90-day program is ideal for your profile. Many see improvement within 2–4 weeks." },
+      { min: 0, label: 'Early', color: '#16a34a', desc: "Catching this early is ideal. The 90-day program will help you build lasting habits and keep your brain sharp for years.", msg: "You're in a great position to protect your memory long-term." }
+    ];
+
+    function showStep(n) {
+      step = n;
+      document.querySelectorAll('.quiz-step').forEach(function(el) {
+        el.classList.toggle('visible', parseInt(el.getAttribute('data-step')) === step);
+      });
+      document.getElementById('progressBar').style.width = (step / 6) * 100 + '%';
+      document.getElementById('btnBack').style.display = step > 1 ? 'inline-flex' : 'none';
+      document.getElementById('btnNext').textContent = step === 6 ? 'See my results' : 'Next';
+
+      document.querySelectorAll('.quiz-option.active').forEach(function(el) { el.classList.remove('active'); });
+      var stepEl = document.getElementById('step' + step);
+      if (stepEl) {
+        var key = step === 1 ? 'age' : step === 2 ? 'concern' : step === 3 ? 'severity' : step === 4 ? 'family' : step === 6 ? 'motivation' : null;
+        var val = key === 'family' ? (data.family ? 'yes' : 'no') : data[key];
+        stepEl.querySelectorAll('.quiz-option').forEach(function(opt) {
+          if (String(opt.getAttribute('data-value')) === String(val)) opt.classList.add('active');
+        });
+      }
+    }
+
+    document.querySelectorAll('.quiz-option').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var stepEl = this.closest('.quiz-step');
+        var stepNum = parseInt(stepEl.getAttribute('data-step'));
+        stepEl.querySelectorAll('.quiz-option').forEach(function(o) { o.classList.remove('active'); });
+        this.classList.add('active');
+        var v = this.getAttribute('data-value');
+        if (stepNum === 1) data.age = parseInt(v);
+        else if (stepNum === 2) data.concern = v;
+        else if (stepNum === 3) data.severity = v;
+        else if (stepNum === 4) data.family = v === 'yes';
+        else if (stepNum === 6) data.motivation = v;
+      });
+    });
+
+    document.getElementById('habits').addEventListener('input', function() { data.habits = this.value; });
+
+    document.getElementById('btnBack').addEventListener('click', function() {
+      if (step > 1) showStep(step - 1);
+    });
+
+    document.getElementById('btnNext').addEventListener('click', function() {
+      if (step < 6) showStep(step + 1);
+      else {
+        document.getElementById('quizPage').style.display = 'none';
+        document.getElementById('calculatingPage').style.display = 'flex';
+        setTimeout(function() {
+          document.getElementById('calculatingPage').style.display = 'none';
+          var score = 35 + Math.floor(Math.random() * 40);
+          var level = levels.find(function(l) { return score >= l.min; }) || levels[0];
+          document.getElementById('resultScore').textContent = score;
+          document.getElementById('resultScore').style.color = level.color;
+          document.getElementById('resultLevel').textContent = level.label;
+          document.getElementById('resultLevel').style.color = level.color;
+          document.getElementById('resultDescription').textContent = level.desc;
+          document.getElementById('resultMessage').textContent = level.msg;
+          document.getElementById('resultPage').style.display = 'block';
+        }, 2800);
+      }
+    });
+
+    showStep(1);
+  </script>
+</body>
+</html>

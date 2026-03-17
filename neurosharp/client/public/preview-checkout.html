@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout Preview — NeuroSharp</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1e293b;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 16px 16px;
+    }
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 480px;
+      margin-bottom: 8px;
+    }
+    .badge {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94a3b8;
+    }
+    .open-link {
+      font-size: 0.8125rem;
+      color: #94a3b8;
+      text-decoration: none;
+    }
+    .open-link:hover { color: #fff; }
+    iframe {
+      width: 100%;
+      max-width: 480px;
+      height: calc(100vh - 36px);
+      min-height: 560px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <span class="badge">Preview — Premium Checkout</span>
+    <a href="/checkout-premium.html" target="_blank" class="open-link">Open in new tab →</a>
+  </div>
+  <iframe src="/checkout-premium.html" title="Checkout preview"></iframe>
+</body>
+</html>

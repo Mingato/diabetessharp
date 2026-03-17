@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>A new AI-powered way to understand blood sugar is getting attention</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Special health feature: how a new AI-powered app is helping people understand their blood sugar patterns and daily habits in a more human, practical way."
+  />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --bg-alt: #ffffff;
+      --bg-soft: #edf1f9;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --accent-dark: #1d4ed8;
+      --text-main: #111827;
+      --text-muted: #4b5563;
+      --text-soft: #6b7280;
+      --border-soft: #e5e7eb;
+      --border-strong: #cbd5f5;
+      --highlight: #16a34a;
+      --highlight-soft: #dcfce7;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.12);
+      --radius-sm: 8px;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --max-width: 880px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-bar {
+      background: #0b1120;
+      color: #e5e7eb;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .top-bar-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0.5rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.75rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+
+    .brand-pill {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #2563eb, #22c55e);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      color: #f9fafb;
+      box-shadow: 0 0 0 1px rgba(191, 219, 254, 0.5);
+    }
+
+    .top-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .top-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .top-meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 999px;
+      background: #4b5563;
+    }
+
+    .main {
+      flex: 1;
+    }
+
+    .article-shell {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 1.75rem 1.25rem 5rem;
+    }
+
+    .article-header {
+      background: var(--bg-alt);
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      padding: 1.75rem 1.75rem 1.25rem;
+    }
+
+    @media (max-width: 640px) {
+      .article-header {
+        padding: 1.25rem 1.25rem 1rem;
+        border-radius: 0 0 18px 18px;
+      }
+    }
+
+    .section-label {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.72rem;
+      color: var(--text-soft);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .headline {
+      font-size: clamp(1.8rem, 3vw, 2.3rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.75rem;
+    }
+
+    .subheadline {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin: 0 0 1.25rem;
+      max-width: 90%;
+    }
+
+    .byline-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      border-top: 1px solid var(--border-soft);
+      padding-top: 0.75rem;
+    }
+
+    .byline-left {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .author-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #bfdbfe, #a7f3d0);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #0b1120;
+    }
+
+    .byline-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .update-pill {
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-soft);
+      color: var(--text-soft);
+    }
+
+    .hero {
+      margin-top: 1.5rem;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: #020617;
+      position: relative;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
+      gap: 0;
+    }
+
+    @media (max-width: 768px) {
+      .hero-inner {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-visual {
+      min-height: 220px;
+      background: radial-gradient(circle at 0 0, #2563eb44, transparent 55%),
+        radial-gradient(circle at 100% 60%, #22c55e33, transparent 60%), #020617;
+      position: relative;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-phone {
+      width: 220px;
+      max-width: 100%;
+      aspect-ratio: 9 / 18;
+      border-radius: 32px;
+      background: linear-gradient(135deg, #0f172a, #020617);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .hero-phone-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #e5e7eb;
+    }
+
+    .hero-score {
+      text-align: center;
+      color: #e5e7eb;
+    }
+
+    .hero-score-number {
+      font-size: 2.3rem;
+      font-weight: 800;
+    }
+
+    .hero-score-label {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .hero-tag {
+      align-self: flex-start;
+      font-size: 0.68rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.12);
+      color: #bbf7d0;
+      border: 1px solid rgba(22, 163, 74, 0.5);
+    }
+
+    .hero-graph {
+      margin-top: 0.75rem;
+      height: 60px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 10% 0, #22c55e66, transparent 50%),
+        radial-gradient(circle at 80% 100%, #2563eb55, transparent 55%), rgba(15, 23, 42, 0.85);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-graph-line {
+      position: absolute;
+      inset: 0;
+      background: none;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .hero-graph-spark {
+      position: absolute;
+      inset: 10px 10px 8px;
+      background: linear-gradient(90deg, rgba(34, 197, 94, 0.85), rgba(37, 99, 235, 0.9));
+      border-radius: 999px;
+      opacity: 0.9;
+      clip-path: polygon(0% 60%, 10% 50%, 25% 65%, 40% 40%, 60% 55%, 75% 30%, 90% 48%, 100% 40%, 100% 100%, 0 100%);
+    }
+
+    .hero-context {
+      padding: 1.25rem 1.5rem;
+      background: var(--bg-alt);
+      color: var(--text-main);
+    }
+
+    .hero-kicker {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--accent-dark);
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-context-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 0 0 0.35rem;
+    }
+
+    .hero-context-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .article-body {
+      margin-top: 1.5rem;
+      background: var(--bg-alt);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      padding: 1.75rem 1.75rem 2.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .article-body {
+        padding: 1.5rem 1.25rem 2.5rem;
+      }
+    }
+
+    .article-body p {
+      margin: 0 0 1rem;
+      font-size: 0.98rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .article-body p.lead {
+      font-size: 1.05rem;
+      color: var(--text-main);
+    }
+
+    .article-body h2 {
+      font-size: 1.2rem;
+      margin: 1.8rem 0 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    .divider {
+      border-top: 1px solid var(--border-soft);
+      margin: 1.75rem 0 1.5rem;
+    }
+
+    .highlight-box {
+      border-radius: var(--radius-lg);
+      background: var(--bg-soft);
+      border: 1px solid var(--border-soft);
+      padding: 1.1rem 1.1rem;
+      margin: 1.5rem 0;
+    }
+
+    .quote-block {
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    .quote-block strong {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-soft);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.9rem;
+      margin: 1.2rem 0 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .feature-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .feature-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .feature-card {
+      background: var(--bg-soft);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      padding: 0.9rem 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .feature-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .feature-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .feature-text {
+      font-size: 0.86rem;
+      color: var(--text-soft);
+      line-height: 1.5;
+    }
+
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .testimonials {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .testimonials {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .testimonial-card {
+      background: #f9fafb;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-soft);
+      padding: 0.9rem;
+      font-size: 0.86rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .testimonial-name {
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 0.84rem;
+    }
+
+    .testimonial-tag {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .cta-section {
+      margin-top: 2rem;
+      padding: 1.4rem 1.2rem;
+      background: linear-gradient(135deg, #e0f2fe, #ecfdf5);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .cta-title {
+      font-size: 1.02rem;
+      font-weight: 600;
+    }
+
+    .cta-text {
+      font-size: 0.94rem;
+      color: var(--text-muted);
+    }
+
+    .cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .btn-cta-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.3rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.94rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #f9fafb;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+    }
+
+    .btn-cta-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 36px rgba(37, 99, 235, 0.5);
+    }
+
+    .btn-cta-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-cta-primary span.icon {
+      margin-right: 0.5rem;
+    }
+
+    .cta-note {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    .guarantee {
+      margin-top: 1.5rem;
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border-soft);
+      background: #f9fafb;
+      padding: 1rem 1rem;
+      font-size: 0.9rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .guarantee-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: var(--highlight-soft);
+      color: var(--highlight);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .guarantee-title {
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .guarantee-text {
+      color: var(--text-soft);
+      font-size: 0.86rem;
+    }
+
+    .faq-list {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--border-soft);
+      padding-top: 1.2rem;
+    }
+
+    .faq-item {
+      margin-bottom: 0.9rem;
+    }
+
+    .faq-q {
+      font-size: 0.92rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .faq-a {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+    }
+
+    .sticky-cta {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0.55rem 1rem calc(env(safe-area-inset-bottom, 0) + 0.55rem);
+      background: rgba(15, 23, 42, 0.92);
+      border-top: 1px solid rgba(148, 163, 184, 0.4);
+      display: flex;
+      justify-content: center;
+      z-index: 30;
+    }
+
+    .sticky-cta-inner {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .sticky-cta-text {
+      color: #e5e7eb;
+      font-size: 0.8rem;
+    }
+
+    .sticky-cta-text strong {
+      display: block;
+      font-size: 0.86rem;
+    }
+
+    .sticky-cta-btn {
+      padding: 0.5rem 0.95rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #f9fafb;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    @media (min-width: 900px) {
+      .sticky-cta {
+        display: none;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="top-bar">
+      <div class="top-bar-inner">
+        <div class="brand">
+          <span class="brand-pill">DS</span>
+          <span>Health Desk</span>
+        </div>
+        <div class="top-meta">
+          <span><span class="top-meta-dot"></span> Special health report</span>
+          <span>Updated <time id="top-date" datetime="">March 2026</time></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <article class="article-shell">
+        <header class="article-header">
+          <div class="section-label">Health · Special Report</div>
+          <h1 class="headline">
+            A new AI‑powered way to understand blood sugar is quietly getting attention
+          </h1>
+          <p class="subheadline">
+            For millions of people living with diabetes, prediabetes or unstable glucose, the challenge is no longer
+            just measuring the numbers — it’s finally understanding what they mean in everyday life. A new app called
+            <strong>DiabetesSharp</strong> is trying to change that.
+          </p>
+
+          <div class="byline-row">
+            <div class="byline-left">
+              <div class="author-avatar">HE</div>
+              <div class="byline-meta">
+                <span><strong>By Health Editorial Team</strong></span><br />
+                <span>Health &amp; Technology Features</span>
+              </div>
+            </div>
+            <div class="byline-right">
+              <span class="update-pill">Editor’s note: This article does not provide medical advice.</span>
+            </div>
+          </div>
+
+          <section class="hero" aria-label="Illustration: person reviewing glucose trends on a smartphone">
+            <div class="hero-inner">
+              <div class="hero-visual">
+                <div class="hero-phone">
+                  <div class="hero-phone-header">
+                    <span style="opacity:0.8;">Today</span>
+                    <span style="font-size:0.7rem;opacity:0.7;">Glucose insights</span>
+                  </div>
+                  <div class="hero-score">
+                    <div class="hero-score-number">82</div>
+                    <div class="hero-score-label">Health Score</div>
+                  </div>
+                  <div class="hero-tag">AI-powered overview</div>
+                  <div class="hero-graph">
+                    <div class="hero-graph-line"></div>
+                    <div class="hero-graph-spark"></div>
+                  </div>
+                  <div style="margin-top:0.8rem;font-size:0.7rem;color:#9ca3af;text-align:left;">
+                    <div>• Fewer spikes after dinner this week</div>
+                    <div>• Time in range trending higher</div>
+                  </div>
+                </div>
+              </div>
+              <div class="hero-context">
+                <div class="hero-kicker">Explainer</div>
+                <h2 class="hero-context-title">
+                  Not another tracker: a system that tries to “read” your day, not just your numbers
+                </h2>
+                <p class="hero-context-text">
+                  DiabetesSharp was developed by specialists in health and technology with a simple idea: most people
+                  don’t need more data — they need more clarity. Instead of asking users to “do more”, the app focuses on
+                  interpreting existing logs, daily habits and small patterns that often go unnoticed.
+                </p>
+              </div>
+            </div>
+          </section>
+        </header>
+
+        <section class="article-body">
+          <p class="lead">
+            Anyone who has tried to manage blood sugar knows the feeling: you check your numbers, adjust your meals,
+            maybe add a walk after dinner — and still, some days the glucose graph seems to have a mind of its own.
+          </p>
+          <p class="lead">
+            Even people who are careful with food, medication and follow‑up often describe the same frustration:
+            <em>“I’m doing my best, but I still don’t really understand what triggers my highs and lows.”</em>
+          </p>
+          <p>
+            That lack of clarity is not a sign of failure. It is, in many ways, a reflection of how complex metabolism
+            really is — and how limited traditional tools can be when they only show a line on a graph without context.
+            A growing group of digital health products is now trying to fill this gap, using artificial intelligence (AI)
+            to turn scattered data into something closer to a daily narrative.
+          </p>
+
+          <div class="divider"></div>
+
+          <h2>Measuring is not the same as understanding</h2>
+          <p>
+            Over the last decade, blood sugar monitoring has become more accessible. Glucose meters are easier to use,
+            continuous sensors are more common, and many people with diabetes or prediabetes have some kind of tracking
+            app on their phone.
+          </p>
+          <p>
+            Still, many of them report the same experience: they see the numbers but struggle to connect them to real
+            life. They may notice spikes after certain meals, random highs overnight, or days when everything looks
+            “off” without an obvious reason. The result is a cycle of trial and error that can feel exhausting.
+          </p>
+          <p>
+            “People are often doing a lot of work — logging meals, checking values, setting reminders — but they don’t
+            always get a clear story back,” says one diabetes educator interviewed for this piece. “It’s not that they
+            lack discipline. It’s that the tools weren’t built to tell a story. They were built to collect numbers.”
+          </p>
+
+          <div class="highlight-box">
+            <strong style="font-size:0.86rem;letter-spacing:0.09em;text-transform:uppercase;color:var(--text-soft);">
+              A common pattern
+            </strong>
+            <p style="margin:0.4rem 0 0.4rem;">
+              Many people with diabetes, prediabetes or unstable glucose describe a similar journey: they start
+              monitoring, feel motivated at first, and then slowly lose confidence as the data piles up without clear
+              explanation.
+            </p>
+            <p style="margin:0;">
+              The question is no longer “Do I have data?” but “Can I make sense of it in time to change something
+              today?”
+            </p>
+          </div>
+
+          <h2>From raw numbers to readable patterns</h2>
+          <p>
+            In response to this challenge, a new wave of apps is exploring how AI can support day‑to‑day glucose
+            management. The idea is not to replace medical care, but to add a layer of interpretation between the
+            person, their habits and their logs.
+          </p>
+          <p>
+            Instead of showing only a chart, these tools look for patterns over days and weeks: How often do spikes
+            happen after certain meals? Is the fasting value gradually drifting up? Are weekends different from weekdays?
+          </p>
+          <p>
+            One of these tools is <strong>DiabetesSharp</strong>, a mobile app that combines
+            <strong>smart glucose insights</strong>, an <strong>AI Doctor available 24/7</strong> and a
+            <strong>simple Health Score</strong> to help people see their daily patterns in a more human way.
+          </p>
+
+          <div class="quote-block">
+            <strong>What makes this approach different?</strong>
+            <p>
+              Instead of asking users to manually decode every spike, the app’s system looks at logs, routines and
+              habits to highlight what stands out — and then turns that into plain‑language guidance the user can act on
+              the same day.
+            </p>
+          </div>
+
+          <h2>Introducing DiabetesSharp: an “interpretation layer” for blood sugar</h2>
+          <p>
+            DiabetesSharp is presented not as a medical device, but as a companion for people who want to better
+            understand their glucose patterns. It was developed by professionals in health and technology who work with
+            a simple premise: numbers are only helpful when they can be translated into concrete decisions.
+          </p>
+          <p>
+            Inside the app, users log (or sync) their glucose readings, note meals or daily events, and gradually build
+            a picture of their routine. The system then responds with:
+          </p>
+          <ul style="margin:0 0 1rem 1.1rem;padding:0;font-size:0.95rem;color:var(--text-muted);line-height:1.7;">
+            <li>smart insights about recurring patterns,</li>
+            <li>daily guidance in natural language,</li>
+            <li>a simple Health Score from 0–100,</li>
+            <li>and progress tracking that focuses on trends, not perfection.</li>
+          </ul>
+          <p>
+            The goal is to move from “I have numbers” to “I know what my numbers are trying to tell me about my day.”
+          </p>
+
+          <h2>What makes DiabetesSharp stand out?</h2>
+          <p>
+            In a market full of generic trackers, DiabetesSharp positions itself as a more interpretative, human‑oriented
+            tool. Some of the features that are drawing attention among people who care about glucose management include:
+          </p>
+
+          <div class="feature-grid" aria-label="Key features of DiabetesSharp">
+            <article class="feature-card">
+              <div class="feature-icon">🩺</div>
+              <div class="feature-title">24/7 AI Doctor</div>
+              <div class="feature-text">
+                A conversational “AI Doctor” available day and night to discuss readings, routines and common questions
+                — always with the reminder that treatment decisions stay with the user’s own care team.
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">📊</div>
+              <div class="feature-title">Smart glucose insights</div>
+              <div class="feature-text">
+                The app looks for repeated spikes, low‑points and trends, summarizing them in simple language rather
+                than leaving users alone with raw graphs.
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🧭</div>
+              <div class="feature-title">Daily guidance</div>
+              <div class="feature-text">
+                Short, concrete suggestions based on recent behavior — such as paying attention to dinner patterns or
+                trying a post‑meal walk on specific days.
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🧠</div>
+              <div class="feature-title">Pattern recognition</div>
+              <div class="feature-text">
+                Instead of focusing on one isolated reading, DiabetesSharp tries to read the “story” of the last days
+                and highlight what truly changed.
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">💯</div>
+              <div class="feature-title">Simple Health Score</div>
+              <div class="feature-text">
+                A single score from 0–100 that reflects recent readings and habits, helping users see whether things are
+                moving in a better or more unstable direction.
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">📈</div>
+              <div class="feature-title">Progress tracking</div>
+              <div class="feature-text">
+                Instead of perfection, the app focuses on visible trends: more days in range, fewer unexpected spikes,
+                clearer routines over weeks.
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">📑</div>
+              <div class="feature-title">Actionable reports</div>
+              <div class="feature-text">
+                Users can generate structured summaries that make it easier to talk about their routine with clinicians
+                — without spending hours preparing notes.
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🖥️</div>
+              <div class="feature-title">Human‑friendly interface</div>
+              <div class="feature-text">
+                The design is calm, readable and modern, focusing on plain language and clear visual cues instead of
+                technical overload.
+              </div>
+            </article>
+            <article class="feature-card">
+              <div class="feature-icon">🤝</div>
+              <div class="feature-title">Personalized recommendations</div>
+              <div class="feature-text">
+                Suggestions adapt over time as the app “learns” how each person tends to respond to meals, schedules and
+                routines — always as guidance, not as prescription.
+              </div>
+            </article>
+          </div>
+
+          <div class="divider"></div>
+
+          <h2>What early users are saying</h2>
+          <p>
+            DiabetesSharp is not a cure, and it is not a replacement for professional care. It is, however, a new way
+            for people to look at information they already have — with extra clarity. Many early users describe the
+            change less in terms of “perfect numbers” and more in terms of confidence and understanding.
+          </p>
+
+          <section class="testimonials" aria-label="User experiences">
+            <article class="testimonial-card">
+              <p>
+                “For the first time, I feel like I can tell a story about my week instead of just guessing. The app
+                shows how my patterns are shifting, not just today’s number.”
+              </p>
+              <div class="testimonial-name">Marisa, 47</div>
+              <div class="testimonial-tag">Lives with type 2 diabetes</div>
+            </article>
+            <article class="testimonial-card">
+              <p>
+                “I used to open my meter and feel overwhelmed. Now I open DiabetesSharp and see simple sentences, a
+                Health Score and a few suggestions. It feels more human.”
+              </p>
+              <div class="testimonial-name">Daniel, 39</div>
+              <div class="testimonial-tag">Prediabetes and busy schedule</div>
+            </article>
+            <article class="testimonial-card">
+              <p>
+                “I still talk to my doctor about all major decisions, but I arrive at appointments with much clearer
+                questions and a better sense of what my ‘typical week’ looks like.”
+              </p>
+              <div class="testimonial-name">Anita, 62</div>
+              <div class="testimonial-tag">Long‑term glucose monitoring</div>
+            </article>
+          </section>
+
+          <div class="highlight-box">
+            <p style="margin:0;">
+              These experiences are individual and do not guarantee specific outcomes. But they illustrate a growing
+              interest in tools that help people connect the dots between daily life and glucose data — especially when
+              those tools are designed to feel supportive rather than judgmental.
+            </p>
+          </div>
+
+          <h2>Why seeing patterns matters as much as seeing numbers</h2>
+          <p>
+            Understanding glucose patterns is not only about medical charts. It can influence how people plan their
+            mornings, organize meals with family, schedule activity and even interpret how they feel throughout the day.
+          </p>
+          <p>
+            When people understand which habits tend to bring more stability — and which situations consistently push
+            them off balance — it becomes easier to make small, realistic adjustments:
+          </p>
+          <ul style="margin:0 0 1rem 1.1rem;padding:0;font-size:0.95rem;color:var(--text-muted);line-height:1.7;">
+            <li>choosing meals that are kinder to their blood sugar,</li>
+            <li>adding short walks when they make the most difference,</li>
+            <li>spotting when sleep or stress may be playing a role,</li>
+            <li>and talking to clinicians with more concrete examples.</li>
+          </ul>
+          <p>
+            In that sense, DiabetesSharp is less about chasing perfect graphs and more about building a more honest —
+            and actionable — picture of daily health.
+          </p>
+
+          <div class="cta-section" id="cta-main">
+            <div class="cta-title">
+              Explore how your habits may be shaping your blood sugar
+            </div>
+            <p class="cta-text">
+              In a few minutes, you can answer a quick set of questions and see how DiabetesSharp builds a personalized
+              starting point for your glucose profile and daily guidance.
+            </p>
+            <div class="cta-actions">
+              <button class="btn-cta-primary js-scroll-next">
+                <span class="icon">▶</span>
+                Take the quick assessment
+              </button>
+              <div class="cta-note">
+                No long‑term commitment. You can cancel anytime if it’s not for you.
+              </div>
+            </div>
+          </div>
+
+          <section class="guarantee" aria-label="Guarantee and risk information">
+            <div class="guarantee-icon">✔</div>
+            <div>
+              <div class="guarantee-title">Low‑risk way to try a new approach</div>
+              <p class="guarantee-text">
+                DiabetesSharp offers a 7‑day money‑back guarantee on eligible plans, with easy cancellation and no
+                long‑term contracts. The intention is simple: give people enough time to see whether this kind of
+                guidance fits their daily life, without pressure.
+              </p>
+            </div>
+          </section>
+
+          <section class="faq-list" aria-label="Frequently asked questions">
+            <div class="faq-item">
+              <div class="faq-q">Is DiabetesSharp a replacement for my doctor or medication?</div>
+              <div class="faq-a">
+                No. DiabetesSharp is a digital tool that helps you make sense of your patterns and routines. Diagnosis,
+                treatment and medication changes must always be discussed with your own healthcare team.
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q">Who is this app for?</div>
+              <div class="faq-a">
+                People living with diabetes, prediabetes or unstable glucose who want a clearer picture of how their
+                habits connect to their numbers. It may also be useful for those supporting a loved one and wanting
+                better visibility.
+              </div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-q">Will it tell me exactly what to eat or prescribe treatment?</div>
+              <div class="faq-a">
+                No. The app can highlight patterns and offer general suggestions — for example, paying attention to
+                certain meals or times of day — but it does not prescribe diets or adjust therapy. Those decisions stay
+                with you and your clinicians.
+              </div>
+            </div>
+          </section>
+
+          <h2 style="margin-top:2rem;">A different way to look at effort</h2>
+          <p>
+            For many people, the main problem is not lack of effort — it is lack of visibility. They are already
+            checking, logging and trying. What they often don’t have is a clear, day‑to‑day translation of what those
+            numbers mean in practice.
+          </p>
+          <p>
+            DiabetesSharp offers one possible path forward: a calmer, more modern way to read daily health patterns with
+            the help of AI, while keeping medical decisions where they belong. For those who feel they are “doing
+            everything right” and still don’t fully understand their glucose, that alone can be a meaningful change.
+          </p>
+          <p>
+            For readers interested in exploring this kind of support, the next natural step is to try the quick
+            assessment and see how a personalized Health Score, smart insights and daily guidance might look in their
+            own routine.
+          </p>
+
+          <div class="cta-section" style="margin-top:1.6rem;">
+            <div class="cta-title">Start your personalized assessment</div>
+            <p class="cta-text">
+              Answer a few questions, see how DiabetesSharp interprets your current routine, and preview the type of
+              insights you could receive day by day.
+            </p>
+            <div class="cta-actions">
+              <button class="btn-cta-primary js-scroll-next">
+                <span class="icon">▶</span>
+                Begin the short quiz
+              </button>
+              <div class="cta-note">
+                You can explore the experience and decide if it feels right for you.
+              </div>
+            </div>
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <div class="sticky-cta" id="sticky-cta">
+      <div class="sticky-cta-inner">
+        <div class="sticky-cta-text">
+          <strong>See your glucose profile</strong>
+          Take a quick assessment in a few minutes.
+        </div>
+        <button class="sticky-cta-btn js-scroll-next">Start now</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const el = document.getElementById("top-date");
+      if (!el) return;
+      const now = new Date();
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      const formatted = now.toLocaleDateString("en-US", options);
+      el.textContent = formatted;
+      el.setAttribute("datetime", now.toISOString().split("T")[0]);
+    })();
+
+    function scrollToNextSection() {
+      const cta = document.getElementById("cta-main");
+      if (cta) {
+        const top = cta.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    }
+
+    document.querySelectorAll(".js-scroll-next").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        scrollToNextSection();
+      });
+    });
+
+    (function () {
+      const sticky = document.getElementById("sticky-cta");
+      if (!sticky) return;
+      const mq = window.matchMedia("(min-width: 900px)");
+      function update() {
+        sticky.classList.toggle("hidden", mq.matches);
+      }
+      mq.addEventListener("change", update);
+      update();
+    })();
+  </script>
+</body>
+</html>
+
