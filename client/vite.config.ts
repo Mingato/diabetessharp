@@ -12,6 +12,10 @@ export default defineConfig({
       "@server": path.resolve(__dirname, "../server/src"),
     },
   },
+  build: {
+    outDir: "../server/client-dist",
+    emptyOutDir: true,
+  },
   server: {
     port: 4001,
     strictPort: false,

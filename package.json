@@ -1,8 +1,8 @@
 {
-  "name": "neurosharp",
+  "name": "diabetessharp",
   "version": "1.0.0",
   "private": true,
-  "description": "Cognitive health app - Alzheimer prevention & memory recovery",
+  "description": "DiabetesSharp - programa de 90 dias para controle da glicemia",
   "scripts": {
     "dev": "npm run build:shared && concurrently \"npm run dev:no-watch --workspace=server\" \"npm run dev:client\"",
     "dev:client-only": "npm run build:shared && npm run dev --workspace=client",
@@ -11,7 +11,7 @@
     "dev:server-only": "npm run build:shared && npm run dev:no-watch --workspace=server",
     "dev:client": "npm run dev --workspace=client",
     "dev:no-watch": "npm run dev:no-watch --workspace=server",
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build:shared && npm run build --workspace=client && npm run build --workspace=server",
     "build:client": "npm run build --workspace=client",
     "build:server": "npm run build --workspace=server",
     "start": "npm run start --workspace=server",

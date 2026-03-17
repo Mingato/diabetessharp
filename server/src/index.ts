@@ -21,9 +21,10 @@ app.use(helmet({
 }));
 
 const allowedOrigins = [
-  "https://neurosharp.com",
-  "https://www.neurosharp.com",
-  "http://manus.space",
+  // produção — domínio configurado via variável de ambiente
+  ...(process.env.CLIENT_URL ? [process.env.CLIENT_URL] : []),
+  ...(process.env.APP_URL ? [process.env.APP_URL] : []),
+  // desenvolvimento local
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://localhost:4001",
@@ -38,6 +39,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, cb) => {
+      // sem origin = mesma origem (prod) ou ferramentas server-to-server
       if (!origin || allowedOrigins.includes(origin)) cb(null, true);
       else cb(null, false);
     },
@@ -46,6 +48,11 @@ app.use(
 );
 
 app.use(express.json({ limit: "256kb" }));
+
+app.get("/api/health", (_req, res) => {
+  res.json({ ok: true, ts: new Date().toISOString() });
+});
+
 app.use(authMiddleware);
 
 const webhookLimiter = rateLimit({
@@ -103,5 +110,5 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.listen(PORT, () => {
-  console.log(`NeuroSharp server running on http://localhost:${PORT}`);
+  console.log(`DiabetesSharp server running on port ${PORT} [${process.env.NODE_ENV ?? "development"}]`);
 });
