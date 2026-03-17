@@ -6,8 +6,10 @@
 import { Resend } from "resend";
 
 const APP_NAME = "NeuroSharp";
-const FROM_EMAIL = process.env.EMAIL_FROM || `${APP_NAME} <noreply@neurosharp.com>`;
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+import { ENV } from "../env.js";
+
+const FROM_EMAIL = ENV.emailFrom;
+const resend = ENV.resendApiKey ? new Resend(ENV.resendApiKey) : null;
 
 export interface WelcomeEmailParams {
   to: string;
@@ -29,7 +31,8 @@ export async function sendWelcomeWithCredentials(params: WelcomeEmailParams): Pr
   }
 
   const name = firstName || "there";
-  const loginUrl = appUrl.replace(/\/$/, "") + "/login";
+  const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
+  const loginUrl = `${hwsAuthUrl}/login?redirect=${encodeURIComponent(appUrl.replace(/\/$/, ""))}`;
 
   const html = `<!DOCTYPE html>
 <html>

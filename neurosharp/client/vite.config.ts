@@ -2,10 +2,24 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
+import { loadEnv } from "vite";
 
-export default defineConfig({
+function vitePluginHwsAuthEnv() {
+  return {
+    name: "hws-auth-env",
+    transformIndexHtml(html: string) {
+      const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
+      const envScript = `<script>window.HWS_AUTH_URL='${hwsAuthUrl}';</script>`;
+      return html.replace("</head>", `${envScript}</head>`);
+    },
+  };
+}
+
+export default defineConfig(({ mode }) => {
+  loadEnv(mode, path.resolve(__dirname, "../server"), "");
+  return {
   appType: "spa",
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), vitePluginHwsAuthEnv()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -20,4 +34,5 @@ export default defineConfig({
       "/api": { target: "http://localhost:4000", changeOrigin: true },
     },
   },
+};
 });

@@ -9,7 +9,7 @@ function generatePassword(): string {
   return s;
 }
 
-const APP_URL = process.env.APP_URL || process.env.CLIENT_URL || "http://localhost:3000";
+import { ENV } from "../env.js";
 
 /**
  * Confirms payment: creates user with login/password, updates order, and sends
@@ -49,7 +49,7 @@ export async function confirmPayment(orderId: number): Promise<{ ok: boolean; lo
       firstName: order.firstName?.trim() || "there",
       login,
       password: pass,
-      appUrl: APP_URL,
+      appUrl: ENV.appUrl,
     });
   }
 

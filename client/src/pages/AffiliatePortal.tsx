@@ -1,21 +1,20 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { trpc } from "../trpc";
+import { useAuth } from "../hooks/useAuth";
+import { getLoginUrl } from "../const";
 
 export function AffiliatePortal() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { data: me } = trpc.auth.me.useQuery(undefined, { retry: false });
-  const login = trpc.auth.login.useMutation({
-    onSuccess: (d) => {
-      if (d.ok && d.token) {
-        localStorage.setItem("neurosharp_token", d.token);
-        window.location.reload();
-      }
-    },
-  });
+  const { data: me, isLoading } = trpc.auth.me.useQuery(undefined, { retry: false });
 
   const isAffiliate = me?.user?.role === "affiliate";
+
+  if (isLoading) {
+    return (
+      <div className="container" style={{ maxWidth: "420px", padding: "3rem 1.5rem", textAlign: "center" }}>
+        <p style={{ color: "var(--color-text-muted)" }}>Carregando...</p>
+      </div>
+    );
+  }
 
   if (me?.user && !isAffiliate) {
     return (
@@ -34,43 +33,12 @@ export function AffiliatePortal() {
     <div className="container" style={{ maxWidth: "420px", padding: "3rem 1.5rem" }}>
       <h1 style={{ fontFamily: "var(--font-serif)", marginBottom: "0.5rem" }}>Portal do Afiliado</h1>
       <p style={{ color: "var(--color-text-muted)", marginBottom: "2rem" }}>
-        Entre com o e-mail e senha fornecidos ao cadastrar como afiliado.
+        Faça login para acessar o dashboard de afiliados.
       </p>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          login.mutate({ email, password });
-        }}
-      >
-        <div style={{ marginBottom: "1rem" }}>
-          <label className="form-label">Email</label>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: "0.75rem", borderRadius: "var(--radius)", border: "1px solid var(--color-border)", background: "var(--color-bg)", color: "var(--color-text)" }}
-          />
-        </div>
-        <div style={{ marginBottom: "1rem" }}>
-          <label className="form-label">Senha</label>
-          <input
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: "100%", padding: "0.75rem", borderRadius: "var(--radius)", border: "1px solid var(--color-border)", background: "var(--color-bg)", color: "var(--color-text)" }}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary" style={{ width: "100%" }} disabled={login.isPending}>
-          {login.isPending ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
-
-      {login.isSuccess && !login.data.ok && (
-        <p style={{ color: "var(--color-warning)", marginTop: "1rem" }}>{login.data.error}</p>
-      )}
+      <a href={getLoginUrl()} className="btn btn-primary" style={{ width: "100%", display: "block", textAlign: "center" }}>
+        Entrar
+      </a>
 
       <p style={{ marginTop: "1.5rem" }}>
         <Link to="/">← Voltar ao site</Link>
@@ -83,10 +51,10 @@ function AffiliateDashboard() {
   const { data, isLoading } = trpc.affiliate.getDashboard.useQuery();
   const { data: linkData } = trpc.affiliate.getReferralLink.useQuery();
   const { data: resources } = trpc.affiliate.getResources.useQuery();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("neurosharp_token");
-    window.location.href = "/affiliates";
+    logout();
   };
 
   return (

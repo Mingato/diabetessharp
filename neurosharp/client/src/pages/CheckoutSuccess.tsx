@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { trpc } from "../trpc";
+import { getLoginUrl } from "../const";
 
 export function CheckoutSuccess() {
   const [searchParams] = useSearchParams();
@@ -43,7 +44,7 @@ export function CheckoutSuccess() {
     if (credentials?.login && credentials?.password) {
       login.mutate({ email: credentials.login, password: credentials.password });
     } else {
-      navigate("/login");
+      window.location.href = getLoginUrl();
     }
   };
 
@@ -71,7 +72,7 @@ export function CheckoutSuccess() {
       </button>
       {!credentials && (
         <p style={{ marginTop: "0.75rem" }}>
-          <Link to="/login">Already have an account? Log in here</Link>
+          <a href={getLoginUrl()}>Already have an account? Log in here</a>
         </p>
       )}
 

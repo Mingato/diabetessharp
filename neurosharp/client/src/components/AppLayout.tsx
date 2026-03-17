@@ -1,4 +1,5 @@
 import { Link, NavLink, useLocation, useNavigate, Outlet } from "react-router-dom";
+import { getLoginUrl } from "../const";
 import { useEffect, useRef, useState } from "react";
 import { trpc } from "../trpc";
 
@@ -155,7 +156,7 @@ export function AppLayout() {
 
   const handleLogout = () => {
     localStorage.removeItem("neurosharp_token");
-    navigate("/login", { replace: true });
+    window.location.href = getLoginUrl();
   };
   return (
     <div className="flex min-h-screen min-h-[100dvh] h-screen overflow-hidden app-bg">

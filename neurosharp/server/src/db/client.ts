@@ -1,15 +1,16 @@
 import pg from "pg";
+import { ENV } from "../env.js";
 
 const { Pool } = pg;
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || "postgresql://localhost:5432/neurosharp",
+  connectionString: ENV.databaseUrl,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
 });
 
-export async function query<T = pg.QueryResultRow>(
+export async function query<T extends pg.QueryResultRow = pg.QueryResultRow>(
   text: string,
   params?: unknown[]
 ): Promise<pg.QueryResult<T>> {

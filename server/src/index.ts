@@ -2,11 +2,14 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "./routers/index.js";
 import { createContext } from "./trpc/context.js";
 import { authMiddleware } from "./middleware/auth.js";
+import { tokenCaptureMiddleware } from "./tokenCaptureMiddleware.js";
+import { handleRefreshToken } from "./refreshTokenRoute.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -34,6 +37,8 @@ const allowedOrigins = [
   "http://127.0.0.1:4003",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
+  "http://localhost:3002",
+  "http://127.0.0.1:3002",
 ];
 app.use(
   cors({
@@ -46,7 +51,14 @@ app.use(
 );
 
 app.use(express.json({ limit: "256kb" }));
+app.use(cookieParser());
+// Capture tokens from URL after HWS Auth login redirect (?token=...&refresh=...)
+app.use(tokenCaptureMiddleware);
 app.use(authMiddleware);
+
+app.post("/api/auth/refresh", async (req, res) => {
+  await handleRefreshToken(req, res);
+});
 
 const webhookLimiter = rateLimit({
   windowMs: 60 * 1000,
@@ -95,12 +107,12 @@ app.use(
   })
 );
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../client-dist")));
-  app.get("*", (_req, res) => {
-    res.sendFile(path.join(__dirname, "../client-dist/index.html"));
-  });
-}
+// Serve client build (client/dist)
+const clientPath = path.join(__dirname, "../../client/dist");
+app.use(express.static(clientPath));
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(clientPath, "index.html"));
+});
 
 app.listen(PORT, () => {
   console.log(`NeuroSharp server running on http://localhost:${PORT}`);

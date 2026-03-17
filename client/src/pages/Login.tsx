@@ -11,8 +11,7 @@ export function Login() {
 
   const login = trpc.auth.login.useMutation({
     onSuccess: (data) => {
-      if (data.ok && data.token && data.user) {
-        localStorage.setItem("neurosharp_token", data.token);
+      if (data.ok && data.user) {
         if (redirectTo?.startsWith("/")) {
           navigate(redirectTo);
         } else if (data.user.role === "admin") {
@@ -28,16 +27,6 @@ export function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Hard-coded test user for internal testing (bypasses API; AppAuthGuard accepts "demo" token)
-    const testEmail = email.trim().toLowerCase();
-    const testPass = password.trim();
-    if ((testEmail === "test@neurosharp.com" || testEmail === "test@diabetessharp.com") && testPass === "Test123!") {
-      localStorage.setItem("neurosharp_token", "demo");
-      navigate(redirectTo?.startsWith("/") ? redirectTo : "/app/dashboard");
-      return;
-    }
-
     login.mutate({ email, password });
   };
 
@@ -89,9 +78,6 @@ export function Login() {
           )}
         </div>
 
-        <p className="text-center text-sm text-[var(--color-text-muted)] mt-3">
-          Test login: <span className="font-mono">test@diabetessharp.com</span> / <span className="font-mono">Test123!</span>
-        </p>
         <p className="text-center text-sm text-[var(--color-text-muted)] mt-4">
           <Link to="/" className="hover:text-[var(--color-accent)] transition-colors">Back to home</Link>
         </p>

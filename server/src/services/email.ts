@@ -29,7 +29,8 @@ export async function sendWelcomeWithCredentials(params: WelcomeEmailParams): Pr
   }
 
   const name = firstName || "there";
-  const loginUrl = appUrl.replace(/\/$/, "") + "/login";
+  const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
+  const loginUrl = `${hwsAuthUrl}/login?redirect=${encodeURIComponent(appUrl.replace(/\/$/, ""))}`;
 
   const html = `<!DOCTYPE html>
 <html>

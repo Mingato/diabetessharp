@@ -1,5 +1,5 @@
 import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
-import type { Request } from "express";
+import type { Request, Response } from "express";
 
 export interface AuthUser {
   id: number;
@@ -9,13 +9,14 @@ export interface AuthUser {
 
 export interface Context {
   req: Request;
+  res: Response;
   user: AuthUser | null;
 }
 
 export function createContext(opts: CreateExpressContextOptions): Context {
-  const { req } = opts;
+  const { req, res } = opts;
   const user = (req as Request & { user?: AuthUser }).user ?? null;
-  return { req, user };
+  return { req, res, user };
 }
 
 export type AppContext = Context;

@@ -7,32 +7,46 @@ import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { appRouter } from "./routers/index.js";
 import { createContext } from "./trpc/context.js";
 import { authMiddleware } from "./middleware/auth.js";
+import { ENV } from "./env.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PORT = Number(process.env.PORT) || 4000;
+
+function getAllowedOrigins(): string[] {
+  const base = [
+    "https://neurosharp.com",
+    "https://www.neurosharp.com",
+    "http://manus.space",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:4001",
+    "http://127.0.0.1:4001",
+  ];
+  if (ENV.appUrl && !base.includes(ENV.appUrl)) base.push(ENV.appUrl);
+  if (ENV.corsExtraOrigins) {
+    for (const o of ENV.corsExtraOrigins.split(",")) {
+      const trimmed = o.trim();
+      if (trimmed && !base.includes(trimmed)) base.push(trimmed);
+    }
+  }
+  return base;
+}
 
 const app = express();
 
 app.use(helmet({
-  contentSecurityPolicy: process.env.NODE_ENV === "production",
+  contentSecurityPolicy: ENV.isProduction,
   crossOriginEmbedderPolicy: false,
 }));
 
-const allowedOrigins = [
-  "https://neurosharp.com",
-  "https://www.neurosharp.com",
-  "http://manus.space",
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-  "http://localhost:5173",
-  "http://127.0.0.1:5173",
-];
 app.use(
   cors({
     origin: (origin, cb) => {
-      if (!origin || allowedOrigins.includes(origin)) cb(null, true);
+      const allowed = getAllowedOrigins();
+      if (!origin || allowed.includes(origin)) cb(null, true);
       else cb(null, false);
     },
     credentials: true,
@@ -89,13 +103,13 @@ app.use(
   })
 );
 
-if (process.env.NODE_ENV === "production") {
+if (ENV.isProduction) {
   app.use(express.static(path.join(__dirname, "../client-dist")));
   app.get("*", (_req, res) => {
     res.sendFile(path.join(__dirname, "../client-dist/index.html"));
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`NeuroSharp server running on http://localhost:${PORT}`);
+app.listen(ENV.port, () => {
+  console.log(`NeuroSharp server running on http://localhost:${ENV.port}`);
 });

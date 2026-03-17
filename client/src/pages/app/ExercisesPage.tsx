@@ -91,16 +91,14 @@ function TopicCard({
 
 export function ExercisesPage() {
   const [filter, setFilter] = useState("all");
-  const [demoCompletedIds, setDemoCompletedIds] = useState<Set<string>>(() => new Set());
-  const isDemo = typeof window !== "undefined" && localStorage.getItem("neurosharp_token") === "demo";
 
-  const { data: todayExercises = [], refetch: refetchToday } = trpc.cognitive.getTodayExercises.useQuery(undefined, { retry: false, enabled: !isDemo });
+  const { data: todayExercises = [], refetch: refetchToday, isError } = trpc.cognitive.getTodayExercises.useQuery(undefined, { retry: false });
   const logExercise = trpc.cognitive.logExercise.useMutation({ onSuccess: () => refetchToday() });
+  const isDemo = isError;
 
-  const completedIds = isDemo ? demoCompletedIds : new Set(todayExercises.map((e: { exerciseType: string }) => e.exerciseType));
+  const completedIds = new Set(todayExercises.map((e: { exerciseType: string }) => e.exerciseType));
 
   const handleComplete = (topic: DiabetesTopic) => {
-    if (isDemo) { setDemoCompletedIds((prev) => new Set(prev).add(topic.id)); return; }
     logExercise.mutate({ exerciseType: topic.id, difficulty: 5, successRate: 100, timeSpent: topic.durationMinutes * 60 });
   };
 

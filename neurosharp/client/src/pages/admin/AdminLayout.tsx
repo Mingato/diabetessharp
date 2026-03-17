@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { trpc } from "../../trpc";
+import { getLoginUrl } from "../../const";
 
 export function AdminLayout() {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ export function AdminLayout() {
   useEffect(() => {
     if (isLoading) return;
     if (isError || !data?.user) {
-      navigate("/login?redirect=" + encodeURIComponent(location.pathname));
+      window.location.href = getLoginUrl();
       return;
     }
     if (data.user.role !== "admin") {

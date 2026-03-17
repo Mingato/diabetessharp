@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation, useNavigate, Outlet } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { trpc } from "../trpc";
+import { useAuth } from "../hooks/useAuth";
 
 const THEME_KEY = "neurosharp_theme";
 const FONT_SIZE_KEY = "neurosharp_font_size";
@@ -129,14 +129,8 @@ export function AppLayout() {
   const [fontSize, setFontSize] = useState<FontSize>(getStoredFontSize);
   const [showAddToPhoneHint, setShowAddToPhoneHint] = useState(false);
   const { installPrompt, triggerInstall, isIOS, isStandalone } = useAddToHomeScreen();
-  const { data: meData } = trpc.auth.me.useQuery(undefined, { retry: false });
-  const isDemo = typeof window !== "undefined" && localStorage.getItem("neurosharp_token") === "demo";
-  const userName =
-    meData?.user?.email != null
-      ? (meData.user as { name?: string }).name ?? meData.user.email.split("@")[0] ?? "User"
-      : isDemo
-        ? "Guest"
-        : null;
+  const { user, logout } = useAuth();
+  const userName = user?.email != null ? (user as { name?: string }).name ?? user.email.split("@")[0] ?? "User" : null;
   const displayName = userName ?? "User";
 
   useEffect(() => {
@@ -158,8 +152,7 @@ export function AppLayout() {
   }, [location.pathname]);
 
   const handleLogout = () => {
-    localStorage.removeItem("neurosharp_token");
-    navigate("/login", { replace: true });
+    logout();
   };
   return (
     <div className="flex min-h-screen min-h-[100dvh] h-screen overflow-hidden app-bg">

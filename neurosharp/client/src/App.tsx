@@ -7,7 +7,7 @@ import { Checkout } from "./pages/Checkout";
 import { CheckoutSuccess } from "./pages/CheckoutSuccess";
 import { UpsellSuccess } from "./pages/UpsellSuccess";
 import { UpsellSkip } from "./pages/UpsellSkip";
-import { Login } from "./pages/Login";
+import { LoginRedirect } from "./components/LoginRedirect";
 import { AppAuthGuard } from "./components/AppAuthGuard";
 import { AppLayout } from "./components/AppLayout";
 import { Dashboard } from "./pages/app/Dashboard";
@@ -42,12 +42,12 @@ import { AdminSettings } from "./pages/admin/AdminSettings";
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/advertorial" replace />} />
+      <Route path="/" element={<Navigate to="/home" replace />} />
       <Route path="/home" element={<Home />} />
       <Route path="/advertorial" element={<Advertorial />} />
       <Route path="/quiz" element={<Quiz />} />
       <Route path="/quiz-checkout-preview" element={<QuizCheckoutPreview />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<LoginRedirect />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/checkout-premium" element={<Navigate to="/checkout-premium.html" replace />} />
       <Route path="/preview-checkout" element={<Navigate to="/preview-checkout.html" replace />} />

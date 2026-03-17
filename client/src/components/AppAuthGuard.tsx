@@ -1,57 +1,37 @@
 import { useEffect } from "react";
-import { useNavigate, useLocation, Outlet } from "react-router-dom";
-import { trpc } from "../trpc";
-
-const DEMO_TOKEN = "demo";
+import { useNavigate, Outlet } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { getLoginUrl } from "../const";
 
 /**
- * Wraps /app routes: requires auth, redirects to /login if not authenticated.
- * If no token or token is "demo", never calls the API — app works offline / without backend.
+ * Wraps /app routes: requires auth, redirects to HWS Auth login if not authenticated.
  */
 export function AppAuthGuard() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const token = typeof window !== "undefined" ? localStorage.getItem("neurosharp_token") : null;
-  const isDemo = token === DEMO_TOKEN;
-  const hasNoToken = !token || token === "";
-
-  const { isLoading, isError } = trpc.auth.me.useQuery(undefined, {
-    retry: false,
-    enabled: !hasNoToken && !isDemo,
-  });
+  const { isAuthenticated, loading } = useAuth();
 
   useEffect(() => {
-    if (hasNoToken) {
-      navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
-      return;
+    if (loading) return;
+    if (!isAuthenticated) {
+      window.location.href = getLoginUrl();
     }
-    if (isDemo) return;
-    if (!isLoading && isError) {
-      navigate(`/login?redirect=${encodeURIComponent(location.pathname)}`, { replace: true });
-    }
-  }, [hasNoToken, isDemo, isLoading, isError, navigate, location.pathname]);
+  }, [isAuthenticated, loading]);
 
-  if (hasNoToken) {
-    return (
-      <div className="app-layout" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
-        <p style={{ color: "var(--color-text-muted)" }}>Redirecting to login...</p>
-      </div>
-    );
-  }
-  if (isDemo) return <Outlet />;
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="app-layout" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
         <p style={{ color: "var(--color-text-muted)" }}>Loading...</p>
       </div>
     );
   }
-  if (isError) {
+
+  if (!isAuthenticated) {
     return (
       <div className="app-layout" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
         <p style={{ color: "var(--color-text-muted)" }}>Redirecting to login...</p>
       </div>
     );
   }
+
   return <Outlet />;
 }

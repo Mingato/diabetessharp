@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { getLoginUrl } from "../const";
 
 const IMG_HERO_BRAIN = "/alzheimer_impactante.png";
 const IMG_BEFORE = "/senhora_lavando_roupa_vaso.png";
@@ -109,12 +110,12 @@ export default function Home() {
             >
               Free Assessment
             </Link>
-            <Link
-              to="/login"
+            <a
+              href={getLoginUrl()}
               className="text-sm font-semibold px-3 sm:px-4 py-2.5 min-h-[44px] flex items-center rounded-xl bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] touch-manipulation active:scale-[0.98] transition-transform"
             >
               Sign In
-            </Link>
+            </a>
           </div>
         </div>
       </header>
@@ -405,12 +406,12 @@ export default function Home() {
             <p className="text-[var(--color-text-muted)] text-xs sm:text-sm mb-4 sm:mb-6">
               Access your personalized program, track your progress, and continue your journey.
             </p>
-            <Link
-              to="/login"
+            <a
+              href={getLoginUrl()}
               className="inline-flex items-center justify-center px-5 sm:px-8 py-3 min-h-[48px] rounded-xl bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-text)] font-semibold hover:bg-[var(--color-surface-hover)] transition-colors touch-manipulation active:scale-[0.98]"
             >
               Sign In to My Account
-            </Link>
+            </a>
             <p className="text-sm text-[var(--color-text-muted)] mt-6">
               Don&apos;t have an account? <Link to="/quiz" className="text-[var(--color-accent)] font-semibold hover:underline">Take the free assessment and start your program →</Link>
             </p>

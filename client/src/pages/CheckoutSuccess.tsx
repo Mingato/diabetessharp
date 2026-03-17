@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { useSearchParams, Link, useNavigate } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import { trpc } from "../trpc";
+import { getLoginUrl } from "../const";
 
 export function CheckoutSuccess() {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const orderIdParam = searchParams.get("order");
   const orderId = orderIdParam ? Number(orderIdParam) : NaN;
   const validOrderId = !!orderIdParam && !isNaN(orderId);
@@ -30,21 +30,9 @@ export function CheckoutSuccess() {
     (confirmPayment.data?.credentials?.login && confirmPayment.data?.credentials?.password
       ? confirmPayment.data.credentials
       : null) ?? data?.credentials ?? null;
-  const login = trpc.auth.login.useMutation({
-    onSuccess: (res) => {
-      if (res.ok && res.token) {
-        localStorage.setItem("neurosharp_token", res.token);
-        navigate("/app/dashboard");
-      }
-    },
-  });
 
   const handleAccess = () => {
-    if (credentials?.login && credentials?.password) {
-      login.mutate({ email: credentials.login, password: credentials.password });
-    } else {
-      navigate("/login");
-    }
+    window.location.href = getLoginUrl();
   };
 
   return (
@@ -66,12 +54,12 @@ export function CheckoutSuccess() {
         </div>
       )}
 
-      <button type="button" className="btn btn-primary" onClick={handleAccess} disabled={login.isPending || !credentials}>
-        {login.isPending ? "Signing in..." : "Access My Program"}
+      <button type="button" className="btn btn-primary" onClick={handleAccess}>
+        Access My Program
       </button>
       {!credentials && (
         <p style={{ marginTop: "0.75rem" }}>
-          <Link to="/login">Already have an account? Log in here</Link>
+          <a href={getLoginUrl()}>Already have an account? Log in here</a>
         </p>
       )}
 
