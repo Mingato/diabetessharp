@@ -8,154 +8,208 @@ import { Card } from "@/components/ui/card";
 import { trpc } from "../trpc";
 import { playAnswerSound } from "../utils/sound";
 
+/** Quiz phases: positive (inviting) → neutral → negative (admission). */
+type QuizPhase = "positive" | "neutral" | "negative" | "release";
+
 interface QuizAnswers {
-  demographics?: string;
-  primary_concern?: string;
-  symptom_severity?: string;
-  memory_impact?: string;
-  family_history?: string;
+  age_functional?: string;
+  goal?: string;
+  wish?: string;
   current_habits?: string[];
-  motivation?: string;
-  goals?: string;
+  frequency?: string;
+  family_history?: string;
+  struggle?: string;
+  fear?: string;
+  identity?: string;
+  preference?: string;
 }
 
-const QUIZ_QUESTIONS = [
+/** 1/3 positive (inviting), 1/3 neutral, 1/3 negative, then pressure-release. */
+const QUIZ_QUESTIONS: Array<{
+  id: number;
+  category: keyof QuizAnswers;
+  phase: QuizPhase;
+  question: string;
+  subtitle?: string;
+  reasonForAsking?: string;
+  type: "radio" | "checkbox";
+  options: Array<{ value: string; label: string }>;
+  icon: string;
+}> = [
+  // ─── BLOCK 1: POSITIVE (inviting, "I want / I wish / I hope") ───
   {
     id: 1,
-    category: "demographics",
-    question:
-      "Hi! I'm Dr. James, diabetes specialist. First, what's your age range?",
-    subtitle: "This helps me understand your risk profile.",
+    category: "age_functional",
+    phase: "positive",
+    question: "This year, I am...",
+    subtitle: "This helps us tailor your results.",
     type: "radio",
     options: [
-      { value: "40-50", label: "40-50 years" },
-      { value: "50-60", label: "50-60 years" },
-      { value: "60-70", label: "60-70 years" },
-      { value: "70+", label: "70+ years" },
+      { value: "40-50", label: "This year I'm 40–50 and I have a lot ahead of me" },
+      { value: "50-60", label: "This year I'm 50–60 and I'm feeling optimistic" },
+      { value: "60-70", label: "This year I'm 60–70 and I feel better than ever" },
+      { value: "70+", label: "This year I'm 70+ and I want to stay sharp and healthy" },
     ],
     icon: "👤",
   },
   {
     id: 2,
-    category: "primary_concern",
-    question: "What is your MAIN concern about your blood sugar?",
-    subtitle: "Choose what worries you most right now.",
+    category: "goal",
+    phase: "positive",
+    question: "In the next 90 days, I want to...",
+    subtitle: "What would a clear win look like for you?",
     type: "radio",
     options: [
-      { value: "high_numbers", label: "My numbers are often high (fasting, post-meal, or HbA1c)" },
-      { value: "lows", label: "I have episodes of low blood sugar (hypoglycemia)" },
-      { value: "complications", label: "I'm afraid of complications (eyes, kidneys, feet, heart)" },
-      { value: "diet_confusion", label: "I don't know what I can or can't eat" },
-      { value: "weight", label: "I struggle with weight and belly fat" },
-      { value: "prevention", label: "I have prediabetes and want to avoid type 2 diabetes" },
+      { value: "lower_a1c", label: "I want to get my HbA1c into a safer range" },
+      { value: "avoid_diabetes", label: "I want to reverse prediabetes or avoid type 2" },
+      { value: "lose_weight", label: "I want to lose weight and reduce belly fat" },
+      { value: "avoid_complications", label: "I want to protect my eyes, kidneys, heart" },
+      { value: "more_energy", label: "I want more daily energy and fewer crashes" },
     ],
-    icon: "🧠",
+    icon: "🎯",
   },
   {
     id: 3,
-    category: "symptom_severity",
-    question: "How often is your blood sugar out of your target range?",
-    subtitle: "Be honest — this isn't judgment, it's to understand your level of control.",
+    category: "wish",
+    phase: "positive",
+    question: "What matters most to you about your blood sugar and health right now?",
+    subtitle: "We ask so we can personalize your recommendation.",
     type: "radio",
     options: [
-      { value: "occasional", label: "Occasionally (1-2x per week)" },
-      { value: "frequent", label: "Frequently (3-5x per week)" },
-      { value: "daily", label: "Daily" },
-      { value: "severe", label: "Very severe (affects my life)" },
+      { value: "control", label: "I hope to feel in control of my numbers" },
+      { value: "energy", label: "I want to feel more energy and clarity" },
+      { value: "long_term", label: "I want to avoid complications down the road" },
+      { value: "confidence", label: "I want to feel confident about what I eat and do" },
     ],
-    icon: "📊",
+    icon: "💙",
   },
+  // ─── BLOCK 2: NEUTRAL ("I usually", "Sometimes", what's happening) ───
   {
     id: 4,
-    category: "memory_impact",
-    question: "How is diabetes (or prediabetes) affecting your daily life?",
-    subtitle: "Energy, mood, work, family, confidence?",
-    type: "radio",
-    options: [
-      { value: "minimal", label: "Minimal impact" },
-      { value: "moderate", label: "Moderate impact (affects some activities)" },
-      { value: "significant", label: "Significant impact (affects many activities)" },
-      { value: "severe", label: "Severe impact (affects my work/relationships)" },
-    ],
-    icon: "💼",
-  },
-  {
-    id: 5,
-    category: "family_history",
-    question: "Do you have a family history of diabetes?",
-    subtitle: "This is important for your diabetes risk.",
-    type: "radio",
-    options: [
-      { value: "no", label: "No" },
-      { value: "distant", label: "Yes, distant relative (aunt, uncle, cousin)" },
-      { value: "parent", label: "Yes, a parent" },
-      { value: "multiple", label: "Yes, multiple family members" },
-    ],
-    icon: "👨‍👩‍👧‍👦",
-  },
-  {
-    id: 6,
     category: "current_habits",
-    question:
-      "Which of these habits do you practice regularly? (Select all that apply)",
-    subtitle: "These factors affect your blood sugar control.",
+    phase: "neutral",
+    question: "Which of these do you usually do?",
+    subtitle: "Select all that apply. There’s no wrong answer.",
     type: "checkbox",
     options: [
-      { value: "exercise", label: "🏃 Regular physical exercise (3+ times/week)" },
-      { value: "sleep", label: "😴 Sleep 7-9 hours per night" },
-      { value: "meditation", label: "🧘 Meditation or mindfulness" },
-      { value: "social", label: "👥 Regular social interaction" },
-      { value: "learning", label: "📚 Continuous learning (courses, reading)" },
-      { value: "diet", label: "🥗 Diabetes-friendly diet (low sugar / low refined carbs)" },
+      { value: "exercise", label: "I usually get regular exercise (3+ times a week)" },
+      { value: "sleep", label: "I usually sleep 7–9 hours a night" },
+      { value: "meditation", label: "I sometimes practice meditation or mindfulness" },
+      { value: "social", label: "I spend time with family or friends regularly" },
+      { value: "learning", label: "I read or learn something new from time to time" },
+      { value: "diet", label: "I try to eat a diabetes-friendly diet most days" },
     ],
     icon: "✅",
   },
   {
-    id: 7,
-    category: "motivation",
-    question: "What's your motivation level to get your blood sugar under control?",
-    subtitle: "Honesty here is crucial.",
+    id: 5,
+    category: "frequency",
+    phase: "neutral",
+    question: "How often do you find your blood sugar out of your target range?",
+    subtitle: "Be honest — this isn’t judgment, it helps us understand where you are.",
     type: "radio",
     options: [
-      { value: "curious", label: "Curious, but not urgent" },
-      { value: "motivated", label: "Motivated — I want to improve" },
-      { value: "very_motivated", label: "Very motivated — this matters to me" },
-      { value: "desperate", label: "I need help now" },
+      { value: "occasional", label: "Sometimes — maybe 1–2 times a week" },
+      { value: "frequent", label: "From time to time — 3–5 times a week" },
+      { value: "daily", label: "Most days it’s a struggle" },
+      { value: "severe", label: "Almost every day — it affects my life" },
     ],
-    icon: "🔥",
+    icon: "📊",
+  },
+  {
+    id: 6,
+    category: "family_history",
+    phase: "neutral",
+    question: "In your family, has anyone had diabetes?",
+    subtitle: "This is important for your risk profile.",
+    type: "radio",
+    options: [
+      { value: "no", label: "No" },
+      { value: "distant", label: "Yes — a distant relative (aunt, uncle, cousin)" },
+      { value: "parent", label: "Yes — a parent" },
+      { value: "multiple", label: "Yes — multiple family members" },
+    ],
+    icon: "👨‍👩‍👧‍👦",
+  },
+  // ─── BLOCK 3: NEGATIVE (admission, "I have difficulty", "I am", fear) ───
+  {
+    id: 7,
+    category: "struggle",
+    phase: "negative",
+    question: "I have difficulty with...",
+    subtitle: "Which of these feels most true for you right now?",
+    type: "radio",
+    options: [
+      { value: "cravings", label: "I have difficulty controlling my cravings" },
+      { value: "diet", label: "I have difficulty sticking to a diet that works" },
+      { value: "time", label: "I have difficulty finding time to take care of myself" },
+      { value: "energy", label: "I have difficulty having enough energy to focus on my health" },
+      { value: "knowledge", label: "I have difficulty knowing what to change" },
+      { value: "nothing_works", label: "I have difficulty — nothing I’ve tried seems to work" },
+    ],
+    icon: "🔄",
   },
   {
     id: 8,
-    category: "goals",
-    question: "What's your main goal for the next 90 days with your diabetes?",
-    subtitle: "What would a clear win look like for you?",
+    category: "fear",
+    phase: "negative",
+    question: "The #1 thing I’m afraid of when it comes to my blood sugar or health is...",
+    reasonForAsking: "We ask because we need to know the best way to help you overcome this.",
     type: "radio",
     options: [
-      { value: "lower_a1c", label: "Lower my HbA1c to a safer range" },
-      { value: "avoid_diabetes", label: "Reverse prediabetes / avoid type 2 diabetes" },
-      { value: "lose_weight", label: "Lose weight and reduce belly fat" },
-      { value: "avoid_complications", label: "Avoid complications (eyes, kidneys, feet, heart)" },
-      { value: "more_energy", label: "Have more daily energy and fewer crashes" },
+      { value: "complications", label: "I’m afraid of complications (eyes, kidneys, feet, heart)" },
+      { value: "getting_worse", label: "I’m afraid of things getting worse" },
+      { value: "alone", label: "I’m afraid of facing this alone" },
+      { value: "too_late", label: "I’m afraid it’s already too late to change" },
+      { value: "never_control", label: "I’m afraid I’ll never get it under control" },
     ],
-    icon: "🎯",
+    icon: "💭",
+  },
+  {
+    id: 9,
+    category: "identity",
+    phase: "negative",
+    question: "Which of these do you feel is most true for you right now?",
+    subtitle: "This helps us meet you where you are.",
+    type: "radio",
+    options: [
+      { value: "ashamed", label: "I’m a bit ashamed of my weight or my numbers" },
+      { value: "very_ashamed", label: "I’m quite ashamed and don’t know where to start" },
+      { value: "stuck", label: "No matter what I do, I can’t seem to get my blood sugar under control" },
+      { value: "overwhelmed", label: "I feel overwhelmed and need a clear plan" },
+      { value: "ready", label: "I’m ready to take action and want the right support" },
+    ],
+    icon: "🔑",
+  },
+  // ─── PRESSURE RELEASE: "What would you like instead?" ───
+  {
+    id: 10,
+    category: "preference",
+    phase: "release",
+    question: "What would you like instead?",
+    subtitle: "Choose the outcome that matters most to you. We’ll show you a plan that fits.",
+    type: "radio",
+    options: [
+      { value: "control", label: "I’d like to feel in control of my numbers and my day" },
+      { value: "energy", label: "I’d like more energy and to feel like myself again" },
+      { value: "peace", label: "I’d like peace of mind about my long-term health" },
+      { value: "simple", label: "I’d like a simple plan I can actually follow" },
+    ],
+    icon: "✨",
   },
 ];
 
 function calculateCognitiveScore(answers: QuizAnswers): number {
   let score = 100;
 
-  if (answers.demographics === "70+") score -= 15;
-  else if (answers.demographics === "60-70") score -= 10;
-  else if (answers.demographics === "50-60") score -= 5;
+  if (answers.age_functional === "70+") score -= 15;
+  else if (answers.age_functional === "60-70") score -= 10;
+  else if (answers.age_functional === "50-60") score -= 5;
 
-  if (answers.symptom_severity === "severe") score -= 25;
-  else if (answers.symptom_severity === "daily") score -= 20;
-  else if (answers.symptom_severity === "frequent") score -= 15;
-  else if (answers.symptom_severity === "occasional") score -= 5;
-
-  if (answers.memory_impact === "severe") score -= 20;
-  else if (answers.memory_impact === "significant") score -= 15;
-  else if (answers.memory_impact === "moderate") score -= 10;
+  if (answers.frequency === "severe") score -= 25;
+  else if (answers.frequency === "daily") score -= 20;
+  else if (answers.frequency === "frequent") score -= 15;
+  else if (answers.frequency === "occasional") score -= 5;
 
   if (answers.family_history === "multiple") score -= 15;
   else if (answers.family_history === "parent") score -= 10;
@@ -164,6 +218,9 @@ function calculateCognitiveScore(answers: QuizAnswers): number {
   if (Array.isArray(answers.current_habits)) {
     score += answers.current_habits.length * 3;
   }
+
+  if (answers.identity === "stuck" || answers.identity === "very_ashamed") score -= 10;
+  else if (answers.identity === "overwhelmed") score -= 5;
 
   return Math.max(0, Math.min(100, score));
 }
@@ -243,18 +300,45 @@ function mapAnswersToBackend(answers: QuizAnswers): {
     frequent: "frequent",
     occasional: "occasional",
   };
+  const primaryConcern = answers.fear ?? answers.struggle ?? answers.wish ?? "control";
+  const motivationMap: Record<string, string> = {
+    ashamed: "moderately_motivated",
+    very_ashamed: "very_motivated",
+    stuck: "very_motivated",
+    overwhelmed: "motivated",
+    ready: "very_motivated",
+  };
   return {
-    age: ageMap[answers.demographics ?? "50-60"] ?? 55,
-    primaryConcern: answers.primary_concern ?? "memory_loss",
-    symptomSeverity:
-      severityMap[answers.symptom_severity ?? "occasional"] ?? "occasional",
+    age: ageMap[answers.age_functional ?? "50-60"] ?? 55,
+    primaryConcern,
+    symptomSeverity: severityMap[answers.frequency ?? "occasional"] ?? "occasional",
     familyHistory: answers.family_history !== "no" && !!answers.family_history,
     currentHabits: Array.isArray(answers.current_habits)
       ? answers.current_habits.join(",")
       : "none",
-    motivationLevel: answers.motivation ?? "moderately_motivated",
+    motivationLevel: motivationMap[answers.identity ?? "ready"] ?? "moderately_motivated",
   };
 }
+
+const PHASE_REASON_SENTENCES: Record<QuizPhase, string> = {
+  positive: "Your answers help us personalize your results.",
+  neutral: "This helps us understand where you are so we can recommend the right next steps.",
+  negative: "You’re not alone — many people feel this way. Your answers help us show you a path forward.",
+  release: "Almost there. Your choice helps us tailor your plan.",
+};
+
+const BOTTOM_BAR_MESSAGES = [
+  "37+ million American adults live with diabetes. Another 96 million have prediabetes.",
+  "Many people live with high blood sugar for years before diagnosis. Early action matters.",
+  "Simple changes in food, movement, and tracking can significantly reduce diabetes risk.",
+  "Uncontrolled diabetes is a leading cause of blindness, kidney failure, and amputations.",
+  "Improving your HbA1c by even 1 point can lower your risk of complications.",
+  "Small daily habits often matter more than perfect willpower once in a while.",
+  "You don't have to fix everything at once — a clear 90-day plan is enough to start.",
+  "Millions of people are taking control of their blood sugar. You're not alone.",
+  "Knowing your risk is the first step. The next step is a plan that fits your life.",
+  "You're not the only one who picked that. We're here to help.",
+];
 
 export function Quiz() {
   const [searchParams] = useSearchParams();
@@ -446,16 +530,13 @@ export function Quiz() {
             Analyzing your answers...
           </h2>
           <p className="text-gray-600">
-            Dr. James is calculating your personalized diabetes risk profile.
+            We're building your personalized diabetes risk profile and recommendation.
           </p>
         </div>
       </div>
     );
   }
 
-
-  // After processing, skip the in-app results page and send the user
-  // straight to the premium checkout (where the offer and CTA live).
   if (showResults) {
     if (typeof window !== "undefined") {
       window.location.href = "/checkout-premium.html";
@@ -464,11 +545,14 @@ export function Quiz() {
   }
 
   const question = QUIZ_QUESTIONS[currentStep];
-  const currentValue = answers[question.category as keyof QuizAnswers];
+  const currentValue = answers[question.category];
   const isAnswered =
     question.type === "checkbox"
       ? Array.isArray(currentValue) && currentValue.length > 0
       : currentValue !== undefined && currentValue !== "";
+
+  const phaseReason = question.reasonForAsking ?? PHASE_REASON_SENTENCES[question.phase];
+  const bottomMessage = BOTTOM_BAR_MESSAGES[currentStep % BOTTOM_BAR_MESSAGES.length];
 
   return (
     <div className="min-h-screen min-h-[100dvh] bg-gradient-to-br from-blue-50 to-indigo-100 py-6 sm:py-12 px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px))]">
@@ -478,9 +562,11 @@ export function Quiz() {
             <span className="text-4xl sm:text-5xl">👨‍⚕️</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-            Diabetes Risk Consultation with Dr. James
+            Your Personalized Diabetes Risk Assessment
           </h1>
-          <p className="text-gray-600 text-sm sm:text-base">Personalized Diabetes Risk Assessment — Under 30 seconds</p>
+          <p className="text-gray-600 text-sm sm:text-base">
+            Discover your risk profile and get a plan that fits — under 2 minutes
+          </p>
         </div>
 
         <div className="mb-6 sm:mb-8">
@@ -507,7 +593,14 @@ export function Quiz() {
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 leading-snug">
             {question.question}
           </h2>
-          <p className="text-gray-600 mb-5 sm:mb-6 text-sm sm:text-base">{question.subtitle}</p>
+          {question.subtitle && (
+            <p className="text-gray-600 mb-2 text-sm sm:text-base">{question.subtitle}</p>
+          )}
+          {phaseReason && (
+            <p className="text-gray-500 mb-5 sm:mb-6 text-xs sm:text-sm italic">
+              {phaseReason}
+            </p>
+          )}
 
           <div className="space-y-2 sm:space-y-3">
             {question.type === "radio" &&
@@ -521,9 +614,7 @@ export function Quiz() {
                     name={question.category}
                     value={option.value}
                     checked={currentValue === option.value}
-                    onChange={() =>
-                      handleAnswer(question.category as keyof QuizAnswers, option.value)
-                    }
+                    onChange={() => handleAnswer(question.category, option.value)}
                     className="w-5 h-5 sm:w-4 sm:h-4 text-blue-600 shrink-0"
                   />
                   <span className="ml-3 text-gray-900 font-medium text-sm sm:text-base">
@@ -549,10 +640,7 @@ export function Quiz() {
                         const updated = checked
                           ? arr.filter((v) => v !== option.value)
                           : [...arr, option.value];
-                        handleAnswer(
-                          question.category as keyof QuizAnswers,
-                          updated
-                        );
+                        handleAnswer(question.category, updated);
                       }}
                       className="w-5 h-5 sm:w-4 sm:h-4 text-blue-600 shrink-0"
                     />
@@ -580,22 +668,13 @@ export function Quiz() {
             className="flex-1 min-h-[48px] bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base touch-manipulation rounded-xl active:scale-[0.98] transition-transform"
           >
             {currentStep === QUIZ_QUESTIONS.length - 1
-              ? "See Results"
+              ? "See my results"
               : "Next →"}
           </Button>
         </div>
 
         <p className="text-center mt-5 sm:mt-6 text-sm font-medium text-gray-700 px-4 py-3 bg-amber-50 border-l-4 border-amber-500 rounded-r">
-          {[
-            "37+ million American adults live with diabetes. Another 96 million have prediabetes.",
-            "Many people live with high blood sugar for years before diagnosis. Early action matters.",
-            "Simple changes in food, movement, and tracking can significantly reduce diabetes risk.",
-            "Uncontrolled diabetes is a leading cause of blindness, kidney failure, and amputations.",
-            "Improving your HbA1c by even 1 point can lower your risk of complications.",
-            "Small daily habits often matter more than perfect willpower once in a while.",
-            "You don't have to fix everything at once — a clear 90-day plan is enough to start.",
-            "Millions of people are taking control of their blood sugar. You're not alone.",
-          ][currentStep]}
+          {bottomMessage}
         </p>
       </div>
     </div>

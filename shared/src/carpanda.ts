@@ -12,12 +12,12 @@ export type CarpandaLinkKey =
   | "upsell3";
 
 export const CARPANDA_LINKS: Record<CarpandaLinkKey, string> = {
-  main: "https://its-brazilian-llc.mycartpanda.com/checkout/208723849:1",
-  mainDiscount: "https://its-brazilian-llc.mycartpanda.com/checkout/208723849:1",
-  recipeBump: "https://its-brazilian-llc.mycartpanda.com/checkout/208723849:1",
-  upsell1: "https://its-brazilian-llc.mycartpanda.com/checkout/208723849:1",
-  upsell2: "https://its-brazilian-llc.mycartpanda.com/checkout/208723849:1",
-  upsell3: "https://its-brazilian-llc.mycartpanda.com/checkout/208723849:1",
+  main: "https://its-brazilian-llc.mycartpanda.com/checkout/208757547:1",
+  mainDiscount: "https://its-brazilian-llc.mycartpanda.com/checkout/208757547:1",
+  recipeBump: "https://its-brazilian-llc.mycartpanda.com/checkout/208757547:1",
+  upsell1: "https://its-brazilian-llc.mycartpanda.com/checkout/208757547:1",
+  upsell2: "https://its-brazilian-llc.mycartpanda.com/checkout/208757547:1",
+  upsell3: "https://its-brazilian-llc.mycartpanda.com/checkout/208757547:1",
 };
 
 export function buildCarpandaUrl(

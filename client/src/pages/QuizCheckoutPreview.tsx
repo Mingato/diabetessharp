@@ -155,7 +155,7 @@ export function QuizCheckoutPreview() {
           </ul>
           <div style={{ textAlign: "center" }}>
             <a
-              href="https://its-brazilian-llc.mycartpanda.com/checkout/208723849:1"
+              href="https://its-brazilian-llc.mycartpanda.com/checkout/208757547:1"
               target="_blank"
               rel="noopener noreferrer"
               style={{

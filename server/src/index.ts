@@ -24,9 +24,10 @@ app.use(helmet({
 }));
 
 const allowedOrigins = [
-  "https://neurosharp.com",
-  "https://www.neurosharp.com",
-  "http://manus.space",
+  // produção — domínio configurado via variável de ambiente
+  ...(process.env.CLIENT_URL ? [process.env.CLIENT_URL] : []),
+  ...(process.env.APP_URL ? [process.env.APP_URL] : []),
+  // desenvolvimento local
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://localhost:4001",
@@ -43,6 +44,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, cb) => {
+      // sem origin = mesma origem (prod) ou ferramentas server-to-server
       if (!origin || allowedOrigins.includes(origin)) cb(null, true);
       else cb(null, false);
     },
@@ -51,9 +53,17 @@ app.use(
 );
 
 app.use(express.json({ limit: "256kb" }));
+<<<<<<< HEAD
 app.use(cookieParser());
 // Capture tokens from URL after HWS Auth login redirect (?token=...&refresh=...)
 app.use(tokenCaptureMiddleware);
+=======
+
+app.get("/api/health", (_req, res) => {
+  res.json({ ok: true, ts: new Date().toISOString() });
+});
+
+>>>>>>> 9b7d18600d1a24a46f868e1ddeb426acaa2bd1d8
 app.use(authMiddleware);
 
 app.post("/api/auth/refresh", async (req, res) => {
@@ -115,5 +125,5 @@ app.get("*", (_req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`NeuroSharp server running on http://localhost:${PORT}`);
+  console.log(`DiabetesSharp server running on port ${PORT} [${process.env.NODE_ENV ?? "development"}]`);
 });
