@@ -2,6 +2,21 @@ import type { Request, Response } from "express";
 import { COOKIE_NAME, REFRESH_COOKIE_NAME } from "../../shared/const.js";
 import { getValidCookieDomain } from "./cookieUtils.js";
 
+/** HWS_AUTH_URL com fallback por domínio em produção (Railway sem env). */
+function getHwsAuthUrl(req: Request): string {
+  const fromEnv = process.env.HWS_AUTH_URL?.trim();
+  if (fromEnv) return fromEnv;
+  if (process.env.NODE_ENV === "production") {
+    const host = req.get?.("x-forwarded-host") || req.get?.("host") || "";
+    const appUrl = process.env.APP_URL || process.env.CLIENT_URL || "";
+    const urlToCheck = host ? `https://${host}` : appUrl;
+    if (urlToCheck.includes("helping-you-works-smarter.com")) {
+      return "https://auth.helping-you-works-smarter.com";
+    }
+  }
+  return "http://localhost:3000";
+}
+
 /**
  * Server-side proxy for token refresh.
  *
@@ -19,7 +34,7 @@ export async function handleRefreshToken(req: Request, res: Response) {
     return res.status(401).json({ success: false, error: "No refresh token" });
   }
 
-  const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
+  const hwsAuthUrl = getHwsAuthUrl(req);
 
   try {
     const response = await fetch(`${hwsAuthUrl}/api/auth/refresh`, {

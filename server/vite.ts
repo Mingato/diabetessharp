@@ -17,10 +17,30 @@ export async function setupVite(app: Express, _server: Server): Promise<void> {
 }
 
 /**
- * Injeta HWS_AUTH_URL no HTML (mesmo padrão do hws-ed-web-app).
+ * Obtém HWS_AUTH_URL: env var, fallback por domínio conhecido, ou localhost.
+ * Em produção no Railway, se HWS_AUTH_URL não estiver definida, derivamos do host.
  */
-function injectRuntimeEnv(html: string): string {
-  const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
+function getHwsAuthUrlForInjection(req?: express.Request): string {
+  const fromEnv = process.env.HWS_AUTH_URL?.trim();
+  if (fromEnv) return fromEnv;
+
+  // Fallback em produção: domínio helping-you-works-smarter.com
+  if (process.env.NODE_ENV === "production") {
+    const host = req?.get?.("x-forwarded-host") || req?.get?.("host") || "";
+    const appUrl = process.env.APP_URL || process.env.CLIENT_URL || "";
+    const urlToCheck = host ? `https://${host}` : appUrl;
+    if (urlToCheck.includes("helping-you-works-smarter.com")) {
+      return "https://auth.helping-you-works-smarter.com";
+    }
+  }
+  return "http://localhost:3000";
+}
+
+/**
+ * Injeta HWS_AUTH_URL no HTML.
+ */
+function injectRuntimeEnv(html: string, req?: express.Request): string {
+  const hwsAuthUrl = getHwsAuthUrlForInjection(req);
   const envScript = `<script>window.HWS_AUTH_URL='${hwsAuthUrl}';</script>`;
   return html.replace("</head>", `${envScript}</head>`);
 }
@@ -33,10 +53,10 @@ export function serveStatic(app: Express): void {
   }
   app.use(express.static(distPath, { index: false }));
   // SPA fallback: serve index.html para rotas não-API, injeta HWS_AUTH_URL
-  app.get("*", (_req, res) => {
+  app.get("*", (req, res) => {
     const indexPath = path.join(distPath, "index.html");
     const html = fs.readFileSync(indexPath, "utf-8");
     res.setHeader("Content-Type", "text/html");
-    res.send(injectRuntimeEnv(html));
+    res.send(injectRuntimeEnv(html, req));
   });
 }
