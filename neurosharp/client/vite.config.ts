@@ -20,6 +20,10 @@ export default defineConfig(({ mode }) => {
   return {
   appType: "spa",
   plugins: [react(), tailwindcss(), vitePluginHwsAuthEnv()],
+  build: {
+    outDir: path.resolve(__dirname, "../server/client-dist"),
+    emptyOutDir: true,
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

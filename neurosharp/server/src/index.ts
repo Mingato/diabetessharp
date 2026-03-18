@@ -54,6 +54,11 @@ app.use(
 );
 
 app.use(express.json({ limit: "256kb" }));
+
+app.get("/api/health", (_req, res) => {
+  res.json({ ok: true, ts: new Date().toISOString() });
+});
+
 app.use(authMiddleware);
 
 const webhookLimiter = rateLimit({
