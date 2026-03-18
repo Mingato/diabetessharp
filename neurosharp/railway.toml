@@ -1,8 +1,0 @@
-# Railway usa o Dockerfile automaticamente quando presente.
-# Build e start estão definidos no Dockerfile.
-
-[deploy]
-healthcheckPath = "/api/health"
-healthcheckTimeout = 100
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
