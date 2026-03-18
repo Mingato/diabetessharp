@@ -117,7 +117,7 @@ app.use(
 
 // Serve client build (server/client-dist from Vite outDir)
 const clientPath = path.join(__dirname, "../client-dist");
-app.use(express.static(clientPath));
+app.use(express.static(clientPath, { index: false }));
 app.get("*", (_req, res) => {
   const indexPath = path.join(clientPath, "index.html");
   let html = fs.readFileSync(indexPath, "utf-8");
