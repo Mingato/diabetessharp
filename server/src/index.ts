@@ -61,6 +61,13 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true, ts: new Date().toISOString() });
 });
 
+// Runtime config for client (HWS_AUTH_URL) — avoids build-time injection so Railway env works
+app.get("/api/config.js", (_req, res) => {
+  const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
+  res.type("application/javascript");
+  res.send(`window.HWS_AUTH_URL=${JSON.stringify(hwsAuthUrl)};`);
+});
+
 app.use(authMiddleware);
 
 app.post("/api/auth/refresh", async (req, res) => {

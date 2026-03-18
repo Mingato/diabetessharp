@@ -8,15 +8,15 @@ function vitePluginHwsAuthEnv() {
   return {
     name: "hws-auth-env",
     transformIndexHtml(html: string) {
-      const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
-      const envScript = `<script>window.HWS_AUTH_URL='${hwsAuthUrl}';</script>`;
+      // Load HWS_AUTH_URL at runtime from /api/config.js (server reads process.env)
+      // so Railway/production env vars work instead of build-time only
+      const envScript = `<script src="/api/config.js"></script>`;
       return html.replace("</head>", `${envScript}</head>`);
     },
   };
 }
 
 export default defineConfig(({ mode }) => {
-  // Load env from server/.env so HWS_AUTH_URL is available
   loadEnv(mode, path.resolve(__dirname, "../server"), "");
   return {
   appType: "spa",
