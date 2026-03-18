@@ -18,7 +18,8 @@ export async function setupVite(app: Express, _server: Server): Promise<void> {
 
 /**
  * Obtém HWS_AUTH_URL: env var ou fallback derivado do request (produção).
- * Em Docker/Nixpacks, a env pode não estar disponível no runtime — derivamos do Host.
+ * Em Docker/Nixpacks/Railway, a env pode não estar disponível no runtime — derivamos do Host.
+ * IMPORTANTE: Preferir X-Forwarded-Host quando atrás de proxy (Railway, etc.).
  */
 function getHwsAuthUrlForInjection(req?: { get?: (name: string) => string | undefined }): string {
   const fromEnv = process.env.HWS_AUTH_URL;
@@ -28,9 +29,12 @@ function getHwsAuthUrlForInjection(req?: { get?: (name: string) => string | unde
   if (process.env.NODE_ENV === "production") {
     let appUrl = process.env.APP_URL || process.env.CLIENT_URL || "";
     if (req?.get) {
-      const host = req.get("host") || req.get("x-forwarded-host");
+      // X-Forwarded-Host primeiro — Railway/proxy envia o host original do cliente
+      const host = req.get("x-forwarded-host") || req.get("host");
       const proto = req.get("x-forwarded-proto") || "https";
-      if (host) appUrl = appUrl || `${proto === "https" ? "https" : "http"}://${host}`;
+      if (host && !host.includes("localhost") && !host.includes("127.0.0.1")) {
+        appUrl = appUrl || `${proto === "https" ? "https" : "http"}://${host}`;
+      }
     }
     if (appUrl) {
       try {
