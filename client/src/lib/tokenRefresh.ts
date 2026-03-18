@@ -21,8 +21,7 @@ export async function refreshAccessToken(): Promise<boolean> {
 
 async function performRefresh(): Promise<boolean> {
   try {
-    const baseUrl = typeof window !== "undefined" ? "" : process.env.VITE_API_URL ?? "http://localhost:4000";
-    const response = await fetch(`${baseUrl}/api/auth/refresh`, {
+    const response = await fetch("/api/auth/refresh", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },

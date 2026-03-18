@@ -1,9 +1,9 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm run build:shared && npm run build --workspace=client && npm run build --workspace=server"
+buildCommand = "npm run build"
 
 [deploy]
-startCommand = "npm run start --workspace=server"
+startCommand = "npm run start"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"

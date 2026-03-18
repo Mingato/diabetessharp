@@ -54,11 +54,15 @@ export async function authenticateRequest(req) {
         throw new Error("Invalid token payload: missing email");
     }
     const role = mapRolesToRole(payload.roles);
-    // Sync user to local DB (upsert by email)
+    // Sync user to local DB (upsert by email — works even without UNIQUE constraint on email)
     try {
-        await query(`INSERT INTO users (email, role) VALUES ($1, $2)
-       ON CONFLICT (email) DO UPDATE SET role = EXCLUDED.role
-       RETURNING id`, [email, role]);
+        const existing = await query(`SELECT id FROM users WHERE email = $1 LIMIT 1`, [email]);
+        if (existing.rows.length > 0) {
+            await query(`UPDATE users SET role = $2 WHERE email = $1`, [email, role]);
+        }
+        else {
+            await query(`INSERT INTO users (email, role) VALUES ($1, $2)`, [email, role]);
+        }
     }
     catch (err) {
         console.warn("[Auth] User sync failed:", err.message);

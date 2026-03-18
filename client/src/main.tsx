@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from "@tanstack/react-query";
 import { httpBatchLink, TRPCClientError } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
-import type { AppRouter } from "@server/routers/index";
+import type { AppRouter } from "@server/routers/index.js";
 import App from "./App";
 import { refreshAccessToken } from "./lib/tokenRefresh";
 import { getLoginUrl } from "./const";
@@ -59,7 +59,7 @@ const trpc = createTRPCReact<AppRouter>();
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
-      url: `${getBaseUrl()}/trpc`,
+      url: `${getBaseUrl()}/api/trpc`,
       fetch(input, init) {
         return globalThis.fetch(input, { ...(init ?? {}), credentials: "include" });
       },

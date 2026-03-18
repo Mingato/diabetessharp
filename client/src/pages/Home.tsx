@@ -116,12 +116,12 @@ export default function Home() {
             >
               Free Assessment
             </Link>
-            <a
-              href={getLoginUrl()}
-              className="text-sm font-semibold px-3 sm:px-4 py-2.5 min-h-[44px] flex items-center rounded-xl bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] touch-manipulation active:scale-[0.98] transition-transform"
+            <Link
+              to="/app"
+              className="text-sm font-semibold text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] min-h-[44px] flex items-center px-2 touch-manipulation"
             >
               Sign In
-            </a>
+            </Link>
           </div>
         </div>
       </header>

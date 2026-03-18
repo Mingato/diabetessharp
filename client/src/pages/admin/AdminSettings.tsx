@@ -5,7 +5,7 @@ export function AdminSettings() {
     <>
       <h1 style={{ fontFamily: "var(--font-serif)", marginBottom: "0.5rem" }}>Configurações</h1>
       <p style={{ color: "var(--color-text-muted)", marginBottom: "2rem" }}>
-        Links Cartpanda e webhook. Edite <code style={{ background: "var(--color-card)", padding: "0.2rem 0.4rem", borderRadius: 4 }}>shared/src/carpanda.ts</code> para alterar os URLs de checkout.
+        Links Cartpanda e webhook. Edite <code style={{ background: "var(--color-card)", padding: "0.2rem 0.4rem", borderRadius: 4 }}>shared/carpanda.ts</code> para alterar os URLs de checkout.
       </p>
 
       <section style={{ marginBottom: "2rem", padding: "1.25rem", background: "var(--color-card)", borderRadius: "var(--radius)", border: "1px solid var(--color-border)" }}>
