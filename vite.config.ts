@@ -9,7 +9,7 @@ function vitePluginHwsAuthEnv() {
     name: "hws-auth-env",
     transformIndexHtml(html: string) {
       const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
-      const envScript = `<script>window.HWS_AUTH_URL=${JSON.stringify(hwsAuthUrl)};</script>`;
+      const envScript = `<script>window.HWS_AUTH_URL='${hwsAuthUrl}';</script>`;
       return html.replace("</head>", `${envScript}</head>`);
     },
   };

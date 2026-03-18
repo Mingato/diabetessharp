@@ -1,12 +1,6 @@
 /** HWS_AUTH_URL injetado pelo server (prod) ou Vite (dev) — mesmo padrão do hws-ed-web-app */
-declare global {
-  interface Window {
-    HWS_AUTH_URL?: string;
-  }
-}
-
 export function getHwsAuthUrl(): string {
-  return (typeof window !== "undefined" && window.HWS_AUTH_URL) || "http://localhost:3000";
+  return (window as any).HWS_AUTH_URL || "http://localhost:3000";
 }
 
 export function getAppUrl(): string {
