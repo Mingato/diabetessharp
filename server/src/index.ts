@@ -12,6 +12,7 @@ import { tokenCaptureMiddleware } from "./tokenCaptureMiddleware.js";
 import { handleRefreshToken } from "./refreshTokenRoute.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT) || 4000;
@@ -59,13 +60,6 @@ app.use(tokenCaptureMiddleware);
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true, ts: new Date().toISOString() });
-});
-
-// Runtime config for client (HWS_AUTH_URL) — avoids build-time injection so Railway env works
-app.get("/api/config.js", (_req, res) => {
-  const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
-  res.type("application/javascript");
-  res.send(`window.HWS_AUTH_URL=${JSON.stringify(hwsAuthUrl)};`);
 });
 
 app.use(authMiddleware);
@@ -121,11 +115,19 @@ app.use(
   })
 );
 
-// Serve client build (client/dist)
-const clientPath = path.join(__dirname, "../../client/dist");
+// Serve client build (server/client-dist from Vite outDir)
+const clientPath = path.join(__dirname, "../client-dist");
 app.use(express.static(clientPath));
 app.get("*", (_req, res) => {
-  res.sendFile(path.join(clientPath, "index.html"));
+  const indexPath = path.join(clientPath, "index.html");
+  let html = fs.readFileSync(indexPath, "utf-8");
+  const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
+  const script = `<script>window.HWS_AUTH_URL=${JSON.stringify(hwsAuthUrl)};</script>`;
+  html = html.replace(/<script>window\.HWS_AUTH_URL=[^<]*<\/script>/, script);
+  if (!html.includes("window.HWS_AUTH_URL")) {
+    html = html.replace("</head>", `${script}</head>`);
+  }
+  res.type("html").send(html);
 });
 
 app.listen(PORT, () => {

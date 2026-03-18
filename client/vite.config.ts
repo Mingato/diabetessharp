@@ -8,10 +8,9 @@ function vitePluginHwsAuthEnv() {
   return {
     name: "hws-auth-env",
     transformIndexHtml(html: string) {
-      // Load HWS_AUTH_URL at runtime from /api/config.js (server reads process.env)
-      // so Railway/production env vars work instead of build-time only
-      const envScript = `<script src="/api/config.js"></script>`;
-      return html.replace("</head>", `${envScript}</head>`);
+      const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
+      const script = `<script>window.HWS_AUTH_URL=${JSON.stringify(hwsAuthUrl)};</script>`;
+      return html.replace("</head>", `${script}</head>`);
     },
   };
 }
