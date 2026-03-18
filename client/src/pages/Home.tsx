@@ -1,96 +1,96 @@
 import { Link } from "react-router-dom";
 import { getLoginUrl } from "../const";
 
-const IMG_HERO_BRAIN = "/alzheimer_impactante.png";
-const IMG_BEFORE = "/senhora_lavando_roupa_vaso.png";
-const IMG_AFTER = "/after_familia_feliz.png";
+const IMG_HERO_BLOOD_SUGAR = "/diabetes_sugar_hero.png";
+const IMG_BEFORE = "/diabetic_foot_before.png";
+const IMG_AFTER = "/diabetes_before_after_banner.png";
 const IMG_PATRICIA = "/patricia_testimonial.png";
 const IMG_DOCTOR = "/medico_shark_tank.png";
 
 const STATS = [
-  { value: "12,000+", label: "Users Worldwide" },
-  { value: "89%", label: "Report Improvement by Week 6" },
-  { value: "90", label: "Day Program" },
+  { value: "45,000+", label: "Users Worldwide" },
+  { value: "89%", label: "Report Better Control by Week 6" },
+  { value: "90", label: "Day Protocol" },
   { value: "4.9★", label: "Average Rating" },
 ];
 
 const HOOKS_HERO = [
-  "Don't wait until you forget a name — or worse.",
-  "The damage starts 10–20 years before you notice. Act now.",
-  "2 minutes to know your risk. Free. No commitment.",
+  "Don't wait until complications start — heart, kidneys, eyes, nerves.",
+  "Damage to your vessels can start years before you notice.",
+  "2 minutes to know your diabetes risk. Free. No commitment.",
 ];
 
 const FEATURES = [
   {
-    title: "Daily Memory Exercises",
-    description: "Science-backed routines that strengthen recall, focus, and cognitive reserve in just 15 minutes a day.",
-    icon: "🧠",
+    title: "Dr. James AI — Q&A 24/7",
+    description: "Ask anything about blood sugar, medications, meals, exercise, or your results. Get clear answers day or night — no judgment, no waiting for an appointment.",
+    icon: "🤖",
   },
   {
-    title: "Dr. James AI Coach",
-    description: "Your personal AI physician available 24/7. Ask about memory, symptoms, or your program — get guidance and stay on track.",
-    icon: "👨‍⚕️",
-  },
-  {
-    title: "Progress Tracking",
-    description: "Weekly cognitive scores, streak counters, and progress insights so you can see how your memory is improving.",
-    icon: "📊",
-  },
-  {
-    title: "Sofia — Memory Recall Companion",
-    description: "Practice recalling past events with an AI that asks questions and gives gentle hints when you don't remember.",
+    title: "Sofia — Your Diabetes Companion",
+    description: "Gentle reminders, tips, and motivation. Ask her about meal choices, portion sizes, or what to do when you slip. Like having a coach who never gets impatient.",
     icon: "💬",
   },
   {
-    title: "Brain-Friendly Nutrition",
-    description: "Recipes, meal plans, and a shopping list designed to support memory and brain health — backed by research.",
+    title: "Recipes & Meal Plans",
+    description: "Low-glycemic, diabetes-friendly recipes, a 7-day meal plan, and a printable shopping list. Science-backed meals that help keep your blood sugar stable.",
     icon: "🥗",
   },
   {
-    title: "Remember Where You Put Things",
-    description: "Photo-based system to label where you store keys, glasses, and daily items so you never lose track again.",
+    title: "Blood Sugar Tracking",
+    description: "Log your glucose, weight, and how you feel. See your trends over time. The app shows you where you stand so you don't slip back.",
+    icon: "📊",
+  },
+  {
+    title: "Smart Shopping List",
+    description: "A list built around your meal plan so you buy the right foods and avoid the ones that spike your glucose. Check off as you shop.",
+    icon: "📋",
+  },
+  {
+    title: "Photos & Evolution",
+    description: "Track your journey with photos and notes. See how your body and energy change over 90 days. Built for the motivation that comes from seeing real progress.",
     icon: "📷",
   },
   {
     title: "Learn Library",
-    description: "Articles and guides on memory, cognitive health, and lifestyle habits that protect your brain.",
+    description: "Articles and guides on diabetes, nutrition, and habits that protect your health. Knowledge and proof in one place.",
     icon: "📚",
   },
   {
     title: "Weekly Report",
-    description: "Summary of your check-ins, exercises, and scores — plus insights to keep you motivated.",
+    description: "Summary of your check-ins and progress so you and your doctor can see how your numbers are improving.",
     icon: "📈",
   },
 ];
 
 const TESTIMONIALS = [
   {
-    quote: "I was forgetting names and where I put my keys. Within 60 days my recall improved. My doctor said he'd never seen improvement like that.",
+    quote: "My HbA1c was 9.2. I was scared of insulin and complications. In 60 days I got it down to 7.1 with the app — recipes, reminders, and someone to answer my questions 24/7. My doctor said he'd never seen such a turn-around.",
     author: "Patricia S., 58",
     location: "Miami, FL",
-    badge: "+32 Memory Score in 90 Days",
+    badge: "HbA1c 9.2 → 7.1 in 60 Days",
   },
   {
-    quote: "I was skeptical. By week 4 I was remembering conversations and appointments without writing everything down. This program gave me my confidence back.",
-    author: "Robert M., 64",
+    quote: "Prediabetes was a wake-up call. The recipes and list made it easy. I lost weight and my fasting glucose dropped. No more prediabetes.",
+    author: "John S., 58",
     location: "Austin, TX",
-    badge: "Regained Clarity After 2 Years",
+    badge: "-12 kg in 90 Days",
   },
   {
-    quote: "The daily exercises and Dr. James made all the difference. I feel sharper at work and at home. My family noticed the change before I did.",
-    author: "David K., 52",
+    quote: "Having someone to ask about meals and meds at any time changed everything. My doctor is happy with my numbers. I'm not waiting anymore.",
+    author: "Ann L., 65",
     location: "Atlanta, GA",
-    badge: "89% Improvement by Week 6",
+    badge: "24/7 Support When I Need It",
   },
 ];
 
 const FAQ_ITEMS = [
-  { q: "Is NeuroSharp a substitute for medication or a doctor?", a: "No. NeuroSharp is a lifestyle and cognitive-training program. It does not replace medical advice, diagnosis, or treatment. Always consult your doctor for memory or health concerns." },
-  { q: "How quickly will I see results?", a: "Many users report feeling more focused within 2–3 weeks. Meaningful memory and recall improvements often show by week 6–8 with consistent use. Results vary by individual." },
+  { q: "Is DiabetesSharp a substitute for medication or a doctor?", a: "No. DiabetesSharp is a lifestyle and diet program. It does not replace medical advice, diagnosis, or treatment. Always consult your doctor for diabetes or health concerns." },
+  { q: "I already have type 2 diabetes. Can this still help?", a: "Yes. The program is designed for people with type 2 diabetes and prediabetes. Many users report better blood sugar control, lower HbA1c, and more confidence with diet and daily habits." },
   { q: "Is my information private and secure?", a: "Yes. Your data is encrypted and stored securely. We do not share your health or usage data with third parties for marketing." },
-  { q: "Do I need any equipment?", a: "No. You only need your phone or computer. The exercises are designed to be done anywhere in about 15 minutes a day." },
+  { q: "Do I need any equipment?", a: "No. You only need your phone or computer. If your doctor has recommended a glucometer, you can log your readings in the app." },
   { q: "What if the program doesn't work for me?", a: "We offer a 7-day money-back guarantee. If you're not satisfied, contact us for a full refund—no questions asked." },
-  { q: "Is this suitable for people over 50?", a: "Yes. NeuroSharp is designed for adults who want to protect and improve memory, especially those 50+ who are proactive about cognitive health." },
+  { q: "Is this suitable for people with prediabetes?", a: "Yes. DiabetesSharp is designed for people with prediabetes or type 2 diabetes who want to take control of their blood sugar and reduce the risk of complications." },
 ];
 
 export default function Home() {
@@ -104,6 +104,12 @@ export default function Home() {
             <span className="font-display font-bold text-base sm:text-lg text-[var(--color-text)]">DiabetesSharp</span>
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
+            <Link
+              to="/app"
+              className="text-sm font-semibold text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] min-h-[44px] flex items-center px-2 touch-manipulation"
+            >
+              Acessar App
+            </Link>
             <Link
               to="/quiz"
               className="text-sm font-semibold text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] min-h-[44px] flex items-center px-2 touch-manipulation"
@@ -127,15 +133,15 @@ export default function Home() {
           <div className="relative grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-16 items-center">
             <div className="text-center lg:text-left order-2 lg:order-1">
               <p className="text-xs sm:text-sm font-semibold text-[var(--color-accent)] mb-2 sm:mb-3 uppercase tracking-wider">
-                Trusted by 12,000+ Users Worldwide
+                Trusted by 45,000+ Users Worldwide
               </p>
               <h1 className="font-display font-bold text-2xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight mb-4 sm:mb-5">
-                Restore Your Memory.
+                Take Control of Your Blood Sugar.
                 <br />
-                <span className="gradient-text">Reclaim Your Clarity.</span>
+                <span className="gradient-text">Protect Your Health.</span>
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-[var(--color-text-muted)] max-w-xl mx-auto lg:mx-0 mb-4 sm:mb-6 leading-relaxed">
-                The science-backed 90-day program that helps you strengthen recall and cognitive health — no pills, no embarrassment.
+                The science-backed 90-day protocol that helps you stabilize glucose, improve HbA1c, and reduce the risk of complications — with the right diet, tracking, and 24/7 support.
               </p>
               <ul className="text-left max-w-md mx-auto lg:mx-0 space-y-1.5 sm:space-y-2 mb-6 sm:mb-8 text-[var(--color-text-muted)] text-xs sm:text-sm">
                 {HOOKS_HERO.map((hook) => (
@@ -150,7 +156,7 @@ export default function Home() {
                   to="/quiz"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 min-h-[52px] rounded-xl bg-[var(--gradient-accent)] text-[var(--color-accent-text)] font-bold text-base sm:text-lg shadow-lg hover:opacity-95 transition-opacity border-2 border-transparent hover:border-[var(--color-accent-hover)] touch-manipulation active:scale-[0.98]"
                 >
-                  <span>🔥</span> Take the Free Assessment — 2 Min
+                  <span>🩸</span> Check My Diabetes Risk — Free (2 Min)
                 </Link>
                 <Link
                   to="/advertorial"
@@ -166,12 +172,12 @@ export default function Home() {
             <div className="order-1 lg:order-2 flex justify-center">
               <div className="relative rounded-xl sm:rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-2xl max-w-md w-full aspect-[4/3] bg-[var(--color-card)]">
                 <img
-                  src={IMG_HERO_BRAIN}
-                  alt="Brain health and memory — act before it's too late"
+                  src={IMG_HERO_BLOOD_SUGAR}
+                  alt="Blood sugar monitoring and diabetes care"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white text-sm font-medium">
-                  Early action can slow or reverse decline. Don&apos;t wait.
+                  Early action can protect your heart, kidneys, and eyes. Don&apos;t wait.
                 </div>
               </div>
             </div>
@@ -182,7 +188,7 @@ export default function Home() {
         <section className="border-y border-[var(--color-accent)]/30 bg-[var(--color-accent-soft)]/30 py-2.5 sm:py-3">
           <div className="max-w-4xl mx-auto px-4 text-center">
             <p className="text-xs sm:text-sm font-semibold text-[var(--color-text)] px-1">
-              🧠 Free assessment in 2 minutes — find out your cognitive risk. No credit card. <Link to="/quiz" className="text-[var(--color-accent)] underline hover:no-underline">Start now →</Link>
+              🩸 Free diabetes risk assessment in 2 minutes. No credit card. <Link to="/quiz" className="text-[var(--color-accent)] underline hover:no-underline">Check now →</Link>
             </p>
           </div>
         </section>
@@ -208,7 +214,7 @@ export default function Home() {
             A complete system designed by doctors and engineers for real, lasting results.
           </p>
           <p className="text-center text-[var(--color-accent)] font-semibold text-xs sm:text-sm mb-8 sm:mb-12">
-            Stop guessing. Start your free assessment and get a personalized plan in 2 minutes.
+            Stop guessing. Check your diabetes risk and get a personalized plan in 2 minutes.
           </p>
           <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
             {FEATURES.map((f) => (
@@ -227,7 +233,7 @@ export default function Home() {
               to="/quiz"
               className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3.5 sm:py-4 min-h-[52px] rounded-xl bg-[var(--gradient-accent)] text-[var(--color-accent-text)] font-bold text-sm sm:text-base shadow-lg hover:opacity-95 transition-opacity touch-manipulation active:scale-[0.98]"
             >
-              🔥 Yes, I Want to Improve My Memory — Start Free
+              🩸 Yes, I Want to Take Control of My Blood Sugar — Start Free
             </Link>
           </div>
         </section>
@@ -236,27 +242,27 @@ export default function Home() {
         <section className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16 md:py-24">
           <h2 className="font-display font-bold text-xl sm:text-2xl md:text-3xl text-center mb-2">The 90-Day Transformation</h2>
           <p className="text-center text-[var(--color-text-muted)] mb-6 sm:mb-10 max-w-2xl mx-auto text-sm sm:text-base">
-            Real people who took control of their cognitive health. The window to act is now — don&apos;t wait until you notice decline.
+            Real people who took control of their blood sugar. The window to act is now — don&apos;t wait until complications start.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 items-center">
             <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-xl">
-              <img src={IMG_BEFORE} alt="Before — struggling with memory" className="w-full aspect-[4/3] object-cover" />
+              <img src={IMG_BEFORE} alt="Before — uncontrolled blood sugar" className="w-full aspect-[4/3] object-cover" />
               <div className="p-4 bg-[var(--color-card)] border-t border-[var(--color-border)]">
                 <p className="text-sm font-semibold text-[var(--color-text)]">Before</p>
-                <p className="text-xs text-[var(--color-text-muted)]">Forgetting names, losing keys, feeling foggy. It doesn&apos;t have to stay that way.</p>
+                <p className="text-xs text-[var(--color-text-muted)]">Uncontrolled numbers, confusion about what to eat, fear of complications. Many people with diabetes have been there.</p>
               </div>
             </div>
             <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-[var(--color-accent)]/40 shadow-xl">
-              <img src={IMG_AFTER} alt="After — clarity and connection" className="w-full aspect-[4/3] object-cover" />
+              <img src={IMG_AFTER} alt="After 90 days — better control" className="w-full aspect-[4/3] object-cover" />
               <div className="p-4 bg-[var(--color-card)] border-t border-[var(--color-border)]">
                 <p className="text-sm font-semibold text-[var(--color-accent)]">After 90 Days</p>
-                <p className="text-xs text-[var(--color-text-muted)]">Sharper recall, more confidence, better connection with family. Start your journey today.</p>
+                <p className="text-xs text-[var(--color-text-muted)]">Better blood sugar, clearer plan, and a sense of control. Real results from DiabetesSharp users.</p>
               </div>
             </div>
           </div>
           <div className="mt-8 sm:mt-10 text-center">
             <Link to="/quiz" className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3.5 sm:py-4 min-h-[52px] rounded-xl bg-[var(--gradient-accent)] text-[var(--color-accent-text)] font-bold text-sm sm:text-base shadow-lg hover:opacity-95 transition-opacity touch-manipulation active:scale-[0.98]">
-              🔥 Take the Free Assessment — See Your Plan
+              🩸 Check My Risk — See My Personalized Plan
             </Link>
           </div>
         </section>
@@ -269,7 +275,7 @@ export default function Home() {
               Built for Privacy. Designed for Results.
             </p>
             <p className="text-[var(--color-text-muted)] mb-8 max-w-2xl mx-auto">
-              A premium dark-themed app that feels as private as your journal and as powerful as a personal cognitive coach.
+              A premium dark-themed app that feels as private as your journal and as powerful as a personal diabetes coach — recipes, tracking, and 24/7 support in one place.
             </p>
             <ul className="text-left max-w-md mx-auto space-y-3 text-sm text-[var(--color-text-muted)]">
               <li className="flex items-center gap-2">✓ All data encrypted and stored securely</li>
@@ -284,10 +290,10 @@ export default function Home() {
         <section className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-16 md:py-24">
           <h2 className="font-display font-bold text-xl sm:text-2xl md:text-3xl text-center mb-3 sm:mb-4">Real Transformations</h2>
           <p className="text-center text-[var(--color-text-muted)] mb-3 sm:mb-4 max-w-2xl mx-auto text-sm sm:text-base">
-            People who took control of their cognitive health. Individual results may vary.
+            People who took control of their blood sugar. Individual results may vary.
           </p>
           <p className="text-center text-[var(--color-accent)] font-semibold text-xs sm:text-sm mb-6 sm:mb-10">
-            Join them. Take the free assessment — 2 minutes. No credit card.
+            Join them. Check your diabetes risk — 2 minutes. No credit card.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {TESTIMONIALS.map((t, i) => (
@@ -312,7 +318,7 @@ export default function Home() {
           </div>
           <div className="mt-8 sm:mt-10 text-center">
             <Link to="/quiz" className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3.5 sm:py-4 min-h-[52px] rounded-xl bg-[var(--gradient-accent)] text-[var(--color-accent-text)] font-bold text-sm sm:text-base shadow-lg hover:opacity-95 transition-opacity touch-manipulation active:scale-[0.98]">
-              🔥 Start My Free Assessment Now
+              🩸 Check My Diabetes Risk Now
             </Link>
           </div>
         </section>
@@ -323,7 +329,7 @@ export default function Home() {
             <h2 className="font-display font-bold text-xl sm:text-2xl md:text-3xl mb-3 sm:mb-4">Zero Risk</h2>
             <p className="text-base sm:text-xl text-[var(--color-text-muted)] mb-3 sm:mb-4">7-Day Money-Back Guarantee</p>
             <p className="text-[var(--color-text-muted)] mb-6">
-              We're so confident in NeuroSharp that we offer a complete, no-questions-asked refund within the first 7 days. If you don't feel a difference, you pay nothing.
+              We're so confident in DiabetesSharp that we offer a complete, no-questions-asked refund within the first 7 days. If you don't feel a difference, you pay nothing.
             </p>
             <ul className="text-left max-w-sm mx-auto space-y-2 text-sm text-[var(--color-text-muted)] mb-8">
               <li>✓ Full refund within 7 days</li>
@@ -332,7 +338,7 @@ export default function Home() {
             </ul>
             <p className="text-[var(--color-accent)] font-semibold text-xs sm:text-sm mb-4 sm:mb-6">Nothing to lose. Everything to gain. Start your free assessment below.</p>
             <Link to="/quiz" className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3.5 sm:py-4 min-h-[52px] rounded-xl bg-[var(--gradient-accent)] text-[var(--color-accent-text)] font-bold text-sm sm:text-base shadow-lg hover:opacity-95 transition-opacity touch-manipulation active:scale-[0.98]">
-              🔥 Take the Free Assessment — 2 Min
+              🩸 Check My Diabetes Risk — 2 Min
             </Link>
           </div>
         </section>
@@ -351,7 +357,7 @@ export default function Home() {
           </div>
           <div className="mt-8 sm:mt-10 text-center">
             <Link to="/quiz" className="inline-flex items-center justify-center gap-2 px-5 sm:px-8 py-3.5 sm:py-4 min-h-[52px] rounded-xl bg-[var(--gradient-accent)] text-[var(--color-accent-text)] font-bold text-sm sm:text-base shadow-lg hover:opacity-95 transition-opacity touch-manipulation active:scale-[0.98]">
-              🔥 Start Free Assessment
+              🩸 Check My Diabetes Risk
             </Link>
           </div>
         </section>
@@ -362,17 +368,17 @@ export default function Home() {
             <h2 className="font-display font-bold text-xl sm:text-2xl md:text-3xl text-center mb-6 sm:mb-8">Our Story</h2>
             <div className="flex flex-col md:flex-row gap-6 sm:gap-8 items-start">
               <div className="w-full max-w-[240px] mx-auto md:mx-0 md:w-64 shrink-0">
-                <img src={IMG_DOCTOR} alt="Medical expertise behind NeuroSharp" className="w-full rounded-2xl border border-[var(--color-border)] shadow-lg aspect-square object-cover" />
+                <img src={IMG_DOCTOR} alt="Medical expertise behind DiabetesSharp" className="w-full rounded-2xl border border-[var(--color-border)] shadow-lg aspect-square object-cover" />
                 <p className="text-center text-xs text-[var(--color-text-muted)] mt-2">Built by doctors & engineers</p>
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[var(--color-text-muted)] leading-relaxed mb-6">
-                  NeuroSharp was built by doctors and engineers who refused to accept that memory decline is inevitable. Dr. Marcus Chen — a neurologist with experience at leading medical centers — saw too many patients who were told to &quot;wait and see&quot; or given a pill. The research showed that lifestyle, exercise, and structured cognitive training could slow or even reverse early decline. He partnered with clinical psychologists and Silicon Valley engineers to create a 90-day program that combines the precision of clinical science with the accessibility of a daily app.
+                  DiabetesSharp was built by endocrinologists and nutritionists who refused to accept that blood sugar control had to be confusing. Dr. Elena Rodriguez — an endocrinologist focused on diabetes care — saw too many patients with blood sugar out of control and no clear plan. The standard response was a prescription and a pamphlet. But the research showed that with the right diet, tracking, and support, many people can significantly improve their numbers and reduce the risk of complications.
                 </p>
                 <p className="text-[var(--color-text-muted)] leading-relaxed mb-6">
-                  Today, NeuroSharp has helped over 12,000 people across the world protect and improve their memory. Our team continues to refine the program based on real user outcomes. We believe everyone deserves access to evidence-based cognitive care.
+                  Today, DiabetesSharp has helped over 45,000 people in 32 countries improve their blood sugar control and feel more confident with their diet and routine — including many who already had type 2 or prediabetes and saw real improvement.
                 </p>
-                <p className="text-[var(--color-accent)] font-semibold">Take the first step: free assessment, 2 minutes, no obligation.</p>
+                <p className="text-[var(--color-accent)] font-semibold">Take the first step: free diabetes risk assessment, 2 minutes, no obligation.</p>
               </div>
             </div>
           </div>
@@ -382,18 +388,18 @@ export default function Home() {
         <section className="relative max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-20 text-center overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_100%,var(--color-accent-soft),transparent)] pointer-events-none" />
           <div className="relative">
-            <h2 className="font-display font-bold text-xl sm:text-2xl md:text-4xl mb-3 sm:mb-4">Your Sharpest Years Can Be Ahead of You</h2>
+            <h2 className="font-display font-bold text-xl sm:text-2xl md:text-4xl mb-3 sm:mb-4">Take Control Now — Whether You Have Prediabetes or Type 2</h2>
             <p className="text-base sm:text-lg text-[var(--color-text-muted)] mb-3 sm:mb-4 max-w-2xl mx-auto">
-              Don&apos;t wait until you notice the first signs. The best time to protect your memory is now.
+              Don&apos;t wait until complications start. The best time to protect your health is now.
             </p>
             <p className="text-[var(--color-text-muted)] mb-6 sm:mb-8 max-w-xl mx-auto text-xs sm:text-sm">
-              Join 12,000+ who took control. Free assessment — 2 minutes. No credit card. 7-day money-back guarantee.
+              Join 45,000+ who took control. Free diabetes risk assessment — 2 minutes. No credit card. 7-day money-back guarantee.
             </p>
             <Link
               to="/quiz"
               className="inline-flex items-center justify-center gap-2 px-5 sm:px-10 py-4 sm:py-5 min-h-[52px] rounded-xl bg-[var(--gradient-accent)] text-[var(--color-accent-text)] font-bold text-base sm:text-lg shadow-lg hover:opacity-95 transition-opacity border-2 border-transparent hover:border-[var(--color-accent-hover)] touch-manipulation active:scale-[0.98]"
             >
-              🔥 Yes — I Want to Test My Cognitive Health (Free)
+              🩸 Yes — I Want to Check My Diabetes Risk (Free)
             </Link>
             <p className="text-xs sm:text-sm text-[var(--color-text-muted)] mt-4 sm:mt-6">100% private · Cancel anytime</p>
           </div>
@@ -406,12 +412,20 @@ export default function Home() {
             <p className="text-[var(--color-text-muted)] text-xs sm:text-sm mb-4 sm:mb-6">
               Access your personalized program, track your progress, and continue your journey.
             </p>
-            <a
-              href={getLoginUrl()}
-              className="inline-flex items-center justify-center px-5 sm:px-8 py-3 min-h-[48px] rounded-xl bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-text)] font-semibold hover:bg-[var(--color-surface-hover)] transition-colors touch-manipulation active:scale-[0.98]"
-            >
-              Sign In to My Account
-            </a>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                to="/app"
+                className="inline-flex items-center justify-center px-5 sm:px-8 py-3 min-h-[48px] rounded-xl bg-[var(--gradient-accent)] text-[var(--color-accent-text)] font-semibold hover:opacity-95 transition-opacity touch-manipulation active:scale-[0.98]"
+              >
+                Acessar App
+              </Link>
+              <a
+                href={getLoginUrl()}
+                className="inline-flex items-center justify-center px-5 sm:px-8 py-3 min-h-[48px] rounded-xl bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-text)] font-semibold hover:bg-[var(--color-surface-hover)] transition-colors touch-manipulation active:scale-[0.98]"
+              >
+                Sign In to My Account
+              </a>
+            </div>
             <p className="text-sm text-[var(--color-text-muted)] mt-6">
               Don&apos;t have an account? <Link to="/quiz" className="text-[var(--color-accent)] font-semibold hover:underline">Take the free assessment and start your program →</Link>
             </p>
