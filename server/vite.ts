@@ -1,6 +1,5 @@
 import express, { type Express } from "express";
 import type { Server } from "http";
-import { createServer as createViteServer } from "vite";
 import path from "node:path";
 import fs from "node:fs";
 
@@ -8,6 +7,8 @@ import fs from "node:fs";
 const PROJECT_ROOT = process.cwd();
 
 export async function setupVite(app: Express, _server: Server): Promise<void> {
+  // Import dinâmico — vite é devDependency, não disponível em produção
+  const { createServer: createViteServer } = await import("vite");
   const vite = await createViteServer({
     server: { middlewareMode: true },
     appType: "spa",
