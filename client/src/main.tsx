@@ -13,22 +13,45 @@ import "./index.css";
 let isRedirectingToLogin = false;
 let isHandlingUnauthorized = false;
 let queryClientInstance: QueryClient | null = null;
+let lastRedirectTime = 0;
+let lastRefreshSuccessTime = 0;
+const REDIRECT_COOLDOWN_MS = 5000;
+const REFRESH_RETRY_COOLDOWN_MS = 10000;
 
 function handleUnauthorizedError(error: Error) {
   if (isRedirectingToLogin || isHandlingUnauthorized) return;
   if (!(error instanceof TRPCClientError)) return;
   if (error.data?.code !== "UNAUTHORIZED") return;
 
+  // Evita loop: não redirecionar de novo se já redirecionamos há pouco
+  if (Date.now() - lastRedirectTime < REDIRECT_COOLDOWN_MS) return;
+
+  // Evita loop: se refresh já retornou sucesso há pouco e ainda 401, vai direto para login
+  const skipRefresh = Date.now() - lastRefreshSuccessTime < REFRESH_RETRY_COOLDOWN_MS;
+
   isHandlingUnauthorized = true;
 
-  refreshAccessToken().then((success) => {
+  (skipRefresh ? Promise.resolve(false) : refreshAccessToken()).then((success) => {
     isHandlingUnauthorized = false;
 
     if (success && queryClientInstance) {
+      lastRefreshSuccessTime = Date.now();
       queryClientInstance.invalidateQueries();
     } else {
       isRedirectingToLogin = true;
-      window.location.href = getLoginUrl();
+      lastRedirectTime = Date.now();
+      const loginUrl = getLoginUrl();
+      // Evita loop: se HWS_AUTH_URL aponta para o próprio app, não redirecionar
+      try {
+        const authOrigin = new URL(loginUrl.split("?")[0]).origin;
+        if (authOrigin === window.location.origin) {
+          console.error("[Auth] HWS_AUTH_URL está apontando para o próprio app. Configure HWS_AUTH_URL com a URL do serviço de autenticação.");
+          return;
+        }
+      } catch {
+        /* ignore */
+      }
+      window.location.href = loginUrl;
     }
   });
 }

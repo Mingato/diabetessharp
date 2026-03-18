@@ -1,21 +1,25 @@
 import { useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { TRPCClientError } from "@trpc/client";
 import { useAuth } from "../hooks/useAuth";
 import { getLoginUrl } from "../const";
 
 /**
  * Wraps /app routes: requires auth, redirects to HWS Auth login if not authenticated.
+ * Quando auth.me retorna 401, o handleUnauthorizedError (main.tsx) tenta refresh e redireciona.
+ * Evitamos redirect duplicado aqui quando já há erro 401.
  */
 export function AppAuthGuard() {
-  const navigate = useNavigate();
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, error } = useAuth();
 
   useEffect(() => {
     if (loading) return;
+    // 401 é tratado pelo handleUnauthorizedError (refresh + redirect) — evita loop
+    if (error instanceof TRPCClientError && error.data?.code === "UNAUTHORIZED") return;
     if (!isAuthenticated) {
       window.location.href = getLoginUrl();
     }
-  }, [isAuthenticated, loading]);
+  }, [isAuthenticated, loading, error]);
 
   if (loading) {
     return (
