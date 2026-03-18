@@ -55,7 +55,11 @@ app.use(cookieParser());
 app.use(tokenCaptureMiddleware);
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, ts: new Date().toISOString() });
+  res.json({
+    ok: true,
+    ts: new Date().toISOString(),
+    authConfigured: !!process.env.HWS_AUTH_URL,
+  });
 });
 
 app.use(authMiddleware);
@@ -122,6 +126,10 @@ if (process.env.NODE_ENV === "development") {
 
 server.listen(PORT, () => {
   console.log(`DiabetesSharp server running on http://localhost:${PORT}/ [${process.env.NODE_ENV ?? "development"}]`);
+  if (process.env.NODE_ENV === "production") {
+    const authUrl = process.env.HWS_AUTH_URL;
+    console.log(`[Auth] HWS_AUTH_URL: ${authUrl ? "✓ configurada" : "✗ NÃO DEFINIDA (redirect usará localhost)"}`);
+  }
 });
 }
 start().catch(console.error);

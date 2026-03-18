@@ -67,6 +67,9 @@ export function serveStatic(app: Express): void {
     const indexPath = path.join(distPath, "index.html");
     const html = fs.readFileSync(indexPath, "utf-8");
     res.setHeader("Content-Type", "text/html");
+    // Evita cache do HTML — garante que o usuário receba sempre o valor injetado atual
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
     res.send(injectRuntimeEnv(html, req));
   });
 }
