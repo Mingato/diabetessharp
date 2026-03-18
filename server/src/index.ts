@@ -53,17 +53,14 @@ app.use(
 );
 
 app.use(express.json({ limit: "256kb" }));
-<<<<<<< HEAD
 app.use(cookieParser());
 // Capture tokens from URL after HWS Auth login redirect (?token=...&refresh=...)
 app.use(tokenCaptureMiddleware);
-=======
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true, ts: new Date().toISOString() });
 });
 
->>>>>>> 9b7d18600d1a24a46f868e1ddeb426acaa2bd1d8
 app.use(authMiddleware);
 
 app.post("/api/auth/refresh", async (req, res) => {
