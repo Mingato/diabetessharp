@@ -9,9 +9,11 @@ import { createContext } from "./trpc/context.js";
 import { authMiddleware } from "./middleware/auth.js";
 import { ENV } from "./env.js";
 import path from "path";
+import fs from "node:fs";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const clientDistPath = path.join(__dirname, "../client-dist");
 
 function getAllowedOrigins(): string[] {
   const base = [
@@ -19,17 +21,22 @@ function getAllowedOrigins(): string[] {
     "https://www.neurosharp.com",
     "http://manus.space",
     "http://localhost:3000",
+    "http://localhost:3005",
     "http://127.0.0.1:3000",
+    "http://localhost:4000",
+    "http://127.0.0.1:4000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:4001",
     "http://127.0.0.1:4001",
   ];
   if (ENV.appUrl && !base.includes(ENV.appUrl)) base.push(ENV.appUrl);
-  if (ENV.corsExtraOrigins) {
-    for (const o of ENV.corsExtraOrigins.split(",")) {
-      const trimmed = o.trim();
-      if (trimmed && !base.includes(trimmed)) base.push(trimmed);
+  for (const envVar of [ENV.corsExtraOrigins, ENV.allowedOrigins]) {
+    if (envVar) {
+      for (const o of envVar.split(",")) {
+        const trimmed = o.trim();
+        if (trimmed && !base.includes(trimmed)) base.push(trimmed);
+      }
     }
   }
   return base;
@@ -108,11 +115,13 @@ app.use(
   })
 );
 
-if (ENV.isProduction) {
-  app.use(express.static(path.join(__dirname, "../client-dist")));
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath, { index: false }));
   app.get("*", (_req, res) => {
-    res.sendFile(path.join(__dirname, "../client-dist/index.html"));
+    res.sendFile(path.join(clientDistPath, "index.html"));
   });
+} else {
+  console.warn("[NeuroSharp] client-dist not found. Run 'npm run build' first to serve the app.");
 }
 
 app.listen(ENV.port, () => {

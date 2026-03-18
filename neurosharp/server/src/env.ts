@@ -8,6 +8,7 @@ export const ENV = {
   port: Number(process.env.PORT) || 4000,
   appUrl: process.env.APP_URL || process.env.CLIENT_URL || "http://localhost:3000",
   corsExtraOrigins: process.env.CORS_EXTRA_ORIGINS?.trim() || "",
+  allowedOrigins: process.env.ALLOWED_ORIGINS?.trim() || "",
   databaseUrl: process.env.DATABASE_URL || "postgresql://localhost:5432/neurosharp",
   jwtSecret: process.env.JWT_SECRET || "dev-secret-change-in-production",
   jwtIssuer: process.env.JWT_ISSUER || "https://auth.hws.com",
