@@ -124,8 +124,9 @@ if (process.env.NODE_ENV === "development") {
   serveStatic(app);
 }
 
-server.listen(PORT, () => {
-  console.log(`DiabetesSharp server running on http://localhost:${PORT}/ [${process.env.NODE_ENV ?? "development"}]`);
+// 0.0.0.0 necessário para Docker/Railway — health check externo precisa alcançar o servidor
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`DiabetesSharp server running on http://0.0.0.0:${PORT}/ [${process.env.NODE_ENV ?? "development"}]`);
   if (process.env.NODE_ENV === "production") {
     const authUrl = process.env.HWS_AUTH_URL;
     console.log(`[Auth] HWS_AUTH_URL: ${authUrl ? "✓ configurada" : "✗ NÃO DEFINIDA (redirect usará localhost)"}`);
