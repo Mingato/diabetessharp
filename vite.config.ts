@@ -3,24 +3,20 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
-function vitePluginClientEnv() {
+/** Injeta HWS_AUTH_URL no client (mesmo padrão do hws-ed-web-app) */
+function vitePluginHwsAuthEnv() {
   return {
-    name: "client-env",
+    name: "hws-auth-env",
     transformIndexHtml(html: string) {
-      const clientEnv = {
-        HWS_AUTH_URL: process.env.HWS_AUTH_URL || "http://localhost:3000",
-        APP_URL: process.env.APP_URL || process.env.CLIENT_URL || "http://localhost:3002",
-      };
-      const script = `<script>window.__ENV__=${JSON.stringify(clientEnv)};</script>`;
-      html = html.replace(/<script>window\.__ENV__=[^<]*<\/script>/, script);
-      if (!html.includes("window.__ENV__")) html = html.replace("</head>", `${script}</head>`);
-      return html;
+      const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
+      const envScript = `<script>window.HWS_AUTH_URL=${JSON.stringify(hwsAuthUrl)};</script>`;
+      return html.replace("</head>", `${envScript}</head>`);
     },
   };
 }
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), vitePluginClientEnv()],
+  plugins: [vitePluginHwsAuthEnv(), react(), tailwindcss()],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client/src"),
