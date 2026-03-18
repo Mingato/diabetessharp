@@ -16,6 +16,9 @@ import { serveStatic, setupVite } from "./vite.js";
 async function start() {
 const app = express();
 
+// Necessário quando atrás de proxy (Railway, etc.) para req.hostname e cookies corretos
+app.set("trust proxy", 1);
+
 app.use(helmet({
   contentSecurityPolicy: process.env.NODE_ENV === "production",
   crossOriginEmbedderPolicy: false,
@@ -24,6 +27,8 @@ app.use(helmet({
 const allowedOrigins = [
   ...(process.env.CLIENT_URL ? [process.env.CLIENT_URL] : []),
   ...(process.env.APP_URL ? [process.env.APP_URL] : []),
+  "https://diabetessharp.helping-you-works-smarter.com",
+  "http://diabetessharp.helping-you-works-smarter.com",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://localhost:4001",

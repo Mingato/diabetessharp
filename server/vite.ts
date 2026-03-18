@@ -5,8 +5,8 @@ import path from "node:path";
 import fs from "node:fs";
 import { getClientEnv } from "./clientEnv.js";
 
-// Em dev: server/; em prod: dist/server/ — subir 2 níveis para a raiz do projeto
-const PROJECT_ROOT = path.resolve(import.meta.dirname, "..", "..");
+// process.cwd() = raiz do projeto (onde npm run dev/start é executado)
+const PROJECT_ROOT = process.cwd();
 
 export async function setupVite(app: Express, _server: Server): Promise<void> {
   const vite = await createViteServer({
