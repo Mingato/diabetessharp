@@ -1,6 +1,15 @@
-/** HWS_AUTH_URL injetado pelo server (prod) ou Vite (dev) — mesmo padrão do hws-ed-web-app */
+/**
+ * HWS_AUTH_URL injetado pelo server (prod) ou Vite (dev) — mesmo padrão do hws-ed-web-app.
+ * Fallback por domínio em produção quando a injeção falha (ex: build cache, CDN, env não disponível no build).
+ */
 export function getHwsAuthUrl(): string {
-  return (window as any).HWS_AUTH_URL || "http://localhost:3000";
+  const fromWindow = (window as any).HWS_AUTH_URL?.trim();
+  if (fromWindow) return fromWindow;
+  // Fallback: em produção no domínio helping-you-works-smarter.com, usar auth do mesmo domínio
+  if (typeof window !== "undefined" && window.location.hostname.includes("helping-you-works-smarter.com")) {
+    return "https://auth.helping-you-works-smarter.com";
+  }
+  return "http://localhost:3000";
 }
 
 export function getAppUrl(): string {
