@@ -7,6 +7,15 @@ import path from "node:path";
 function vitePluginHwsAuthEnv() {
   return {
     name: "hws-auth-env",
+    buildStart() {
+      if (process.env.NODE_ENV === "production" && !process.env.HWS_AUTH_URL?.trim()) {
+        throw new Error(
+          "HWS_AUTH_URL deve estar definida no ambiente de build para deploy em produção. " +
+            "Em deploy estático (sem server), o client usa o valor injetado no build. " +
+            "Configure a variável antes de rodar 'npm run build'."
+        );
+      }
+    },
     transformIndexHtml(html: string) {
       const hwsAuthUrl = process.env.HWS_AUTH_URL || "http://localhost:3000";
       const envScript = `<script>window.HWS_AUTH_URL='${hwsAuthUrl}';</script>`;

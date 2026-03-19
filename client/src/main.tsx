@@ -49,17 +49,12 @@ const queryClient = new QueryClient({
 });
 queryClientInstance = queryClient;
 
-function getBaseUrl() {
-  if (typeof window !== "undefined") return "";
-  return process.env.VITE_API_URL ?? "http://localhost:4000";
-}
-
 const trpc = createTRPCReact<AppRouter>();
 
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
-      url: `${getBaseUrl()}/api/trpc`,
+      url: "/api/trpc",
       fetch(input, init) {
         return globalThis.fetch(input, { ...(init ?? {}), credentials: "include" });
       },
