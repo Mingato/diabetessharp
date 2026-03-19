@@ -9,10 +9,10 @@ function vitePluginHwsAuthEnv() {
     name: "hws-auth-env",
     buildStart() {
       if (process.env.NODE_ENV === "production" && !process.env.HWS_AUTH_URL?.trim()) {
-        throw new Error(
-          "HWS_AUTH_URL deve estar definida no ambiente de build para deploy em produção. " +
-            "Em deploy estático (sem server), o client usa o valor injetado no build. " +
-            "Configure a variável antes de rodar 'npm run build'."
+        console.warn(
+          "[hws-auth-env] HWS_AUTH_URL não definida no build. " +
+            "Em deploy com server (Railway, etc.), o valor é injetado em runtime — OK. " +
+            "Em deploy estático (sem server), configure HWS_AUTH_URL no ambiente de build."
         );
       }
     },
